@@ -48,14 +48,18 @@ export default {
       geoqlh: mapSources.geoqlh,
 			proj: 'EPSG:4326', //定义wgs84地图坐标系
 			proj_m: 'EPSG:3857', //定义墨卡托地图坐标系
+      layers: {}, // 用于存储图层的对象
 			map: null,
 			mapLayer: null,
 			mapLayerlabel: null,
-      geojson: geoparks
+      geojson: geoparks,
 		}
 	},
 	mounted() {
      this.initMap()
+     this.$bus.$on('LoadGeoJson',(checked)=>{
+				this.loadjson(checked)
+			})
   },
   methods: {
     initMap(){
@@ -83,9 +87,11 @@ export default {
       })
    
       //将图层加载到地图对象
-      this.map.addLayer(this.mapLayer)
-      this.map.addLayer(this.mapLayerlabel)
-      this.loadjson()
+      this.addLayer(this.mapLayer,'tdt')
+      this.addLayer(this.mapLayerlabel,'tdtlabel')
+
+      // this.map.addLayer(this.mapLayerlabel)
+      // this.loadjson()
      
      
 
@@ -104,23 +110,29 @@ export default {
       //       collapsed:false
       //   }))
     },
-loadjson:function(){
-   //初始化json图层
-   let features = (new GeoJSON()).readFeatures(this.geojson);
-      for (let i = 0; i < features.length; i++) {
-        let _geom = features[i].getGeometry();
-        _geom.transform("EPSG:4326", "EPSG:3857");
-      }
-      let vectorSource = new Vector({
-        features: features
-      });
-      let vector = new VectorLayer({
-        source: vectorSource,
-        style: this.styleFunction,
-        renderMode: "vector"
-      });
-      this.map.addLayer(vector)
-},
+    /******************加载GeoJSON图层***************/
+    loadjson:function(checked=true){
+      if(checked){
+
+      //初始化json图层
+      let features = (new GeoJSON()).readFeatures(this.geojson);
+          for (let i = 0; i < features.length; i++) {
+            let _geom = features[i].getGeometry();
+            _geom.transform("EPSG:4326", "EPSG:3857");
+          }
+          let vectorSource = new Vector({
+            features: features
+          });
+          let vector = new VectorLayer({
+            source: vectorSource,
+            style: this.styleFunction,
+            renderMode: "vector"
+          });
+          this.addLayer(vector,'POI')}
+          else{
+            this.removeLayerByName('POI')
+          }
+    },
 		/******************地图切换方法***************/
 		changeBaseMap: function(value) {
       console.log(value)
@@ -202,7 +214,7 @@ loadjson:function(){
       this.loadjson()
 
 		},
-    /******************JSON样式***************/ 
+    /******************改变JSON样式***************/ 
     styleFunction(feature) {
       let stroke = new Stroke({
         color: 'black',
@@ -258,6 +270,22 @@ loadjson:function(){
 
       return styles;
     },
+    /******************添加图层并存储到 layers 对象中***************/ 
+    addLayer(layer, name) {
+      this.map.addLayer(layer);
+      this.layers[name] = layer;
+      console.log("添加了图层")
+    },
+    /******************通过名称移除图层***************/ 
+    removeLayerByName(name) {
+     
+      const layer = this.layers[name];
+      if (layer) {
+        this.map.removeLayer(layer);
+        delete this.layers[name];
+        console.log("移除了图层")
+      }
+  }
 	}
 }
 </script>

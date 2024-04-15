@@ -18,6 +18,8 @@ export default {
   methods: {
     poi(checked) {
       // 公园POI点复选框变化时的处理函数
+      console.log(checked);
+      this.$bus.$emit('LoadGeoJson', checked);
     },
     heatmap(checked) {
       // 热力图复选框变化时的处理函数
