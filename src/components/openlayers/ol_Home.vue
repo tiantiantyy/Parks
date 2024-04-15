@@ -87,8 +87,11 @@ export default {
       })
    
       //将图层加载到地图对象
-      this.addLayer(this.mapLayer,'tdt')
-      this.addLayer(this.mapLayerlabel,'tdtlabel')
+      this.mapLayer = new TileLayer({
+            source: this.geoqcs,
+            projection: this.proj
+          })
+          this.map.addLayer(this.mapLayer)
 
       // this.map.addLayer(this.mapLayerlabel)
       // this.loadjson()
