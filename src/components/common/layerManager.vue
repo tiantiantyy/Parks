@@ -23,6 +23,8 @@ export default {
     },
     heatmap(checked) {
       // 热力图复选框变化时的处理函数
+      console.log(checked);
+      this.$bus.$emit('LoadHeatMap', checked);
     },
     yinghuo(checked) {
       // 萤火图复选框变化时的处理函数

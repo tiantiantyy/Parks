@@ -18,10 +18,12 @@ import geoparks from "@/assets/geoparks.geojson"
 import Map from 'ol/Map'
 import View from 'ol/View'
 import GeoJSON from "ol/format/GeoJSON"
+import { Heatmap as HeatmapLayer } from 'ol/layer.js'
 import TileLayer from 'ol/layer/Tile'
 import VectorLayer from 'ol/layer/Vector'
 import { transform } from 'ol/proj'
 import { Vector } from 'ol/source'
+import VectorSource from 'ol/source/Vector.js'
 import Circle from 'ol/style/Circle'
 import Fill from 'ol/style/Fill'
 import RegularShape from 'ol/style/RegularShape.js'
@@ -29,6 +31,7 @@ import Stroke from 'ol/style/Stroke'
 import Style from 'ol/style/Style'
 import Text from 'ol/style/Text'
 import mapSources from './modules/maplist'
+
 export default {
 	components: {},
 	data() {
@@ -60,6 +63,9 @@ export default {
      this.$bus.$on('LoadGeoJson',(checked)=>{
 				this.loadjson(checked)
 			})
+    this.$bus.$on('LoadHeatMap',(checked)=>{
+      this.HeatMap(checked)
+    })
   },
   methods: {
     initMap(){
@@ -92,7 +98,6 @@ export default {
             projection: this.proj
           })
           this.map.addLayer(this.mapLayer)
-
       // this.map.addLayer(this.mapLayerlabel)
       // this.loadjson()
      
@@ -288,7 +293,29 @@ export default {
         delete this.layers[name];
         console.log("移除了图层")
       }
-  }
+  },
+  /******************创建一个热力图层***************/ 
+  HeatMap (checked) {
+    if(checked){
+     let vector = new HeatmapLayer({
+     // 矢量数据源
+       source: new VectorSource({
+         features: (new GeoJSON()).readFeatures(this.geojson, {
+         dataProjection: 'EPSG:4326',
+         featureProjection: 'EPSG:3857'
+     }),
+       }),
+       blur: 20, // 模糊尺寸
+       radius: 20 // 热点半径
+     })
+
+      //将图层加载到地图对象
+      this.addLayer(vector,'HeatMap')}
+      else{
+        this.removeLayerByName('HeatMap')
+
+      }
+   }
 	}
 }
 </script>
