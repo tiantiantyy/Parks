@@ -16,6 +16,7 @@
 <script>
 import geoparks from "@/assets/geoparks.geojson"
 import Map from 'ol/Map'
+import Overlay from 'ol/Overlay'
 import View from 'ol/View'
 import GeoJSON from "ol/format/GeoJSON"
 import { Heatmap as HeatmapLayer } from 'ol/layer.js'
@@ -56,6 +57,7 @@ export default {
 			mapLayer: null,
 			mapLayerlabel: null,
       geojson: geoparks,
+      overlay:null,//弹窗
 		}
 	},
 	mounted() {
@@ -136,10 +138,32 @@ export default {
             style: this.styleFunction,
             renderMode: "vector"
           });
-          this.addLayer(vector,'POI')}
+          this.addLayer(vector,'POI')
+        
+        }
+          
           else{
             this.removeLayerByName('POI')
           }
+             // 添加地图点击事件监听器
+      // this.map.on('click', this.showOverlayOnClick);
+      
+      this.map.on('click', (evt) => {
+    if (this.map.hasFeatureAtPixel(evt.pixel)) {
+        this.map.getTargetElement().style.cursor = "pointer";
+        this.map.forEachFeatureAtPixel(evt.pixel, (feature) => {
+            // console.log(feature);
+            let name = feature.get("name");
+            let province=feature.get("province")
+            console.log(name);
+            this.showOverlayOnClick(name,province, evt);
+        });
+    } else {
+        this.map.getTargetElement().style.cursor = "default";
+    }
+});
+
+    
     },
 		/******************地图切换方法***************/
 		changeBaseMap: function(value) {
@@ -282,7 +306,7 @@ export default {
     addLayer(layer, name) {
       this.map.addLayer(layer);
       this.layers[name] = layer;
-      console.log("添加了图层")
+      // console.log("添加了图层")
     },
     /******************通过名称移除图层***************/ 
     removeLayerByName(name) {
@@ -291,7 +315,7 @@ export default {
       if (layer) {
         this.map.removeLayer(layer);
         delete this.layers[name];
-        console.log("移除了图层")
+        // console.log("移除了图层")
       }
   },
   /******************创建一个热力图层***************/ 
@@ -315,7 +339,38 @@ export default {
         this.removeLayerByName('HeatMap')
 
       }
-   }
+   },
+  /******************鼠标点击geojson的响应函数***************/ 
+   showOverlayOnClick(name,province,event) {
+    // 首先销毁之前的 overlay
+    if (this.overlay) {
+        this.map.removeOverlay(this.overlay);
+        this.overlay = null;
+    }
+
+    console.log("进入了showOverlayOnClick")
+  // 获取点击坐标
+  const coordinates = event.coordinate;
+console.log(coordinates)
+  // 创建 overlay 元素
+  const overlayElement = document.createElement('div');
+  overlayElement.className = 'custom-overlay';
+  overlayElement.innerHTML = `<div class="overlay-content">${name}</div><br><p>${province}</p>`;
+  overlayElement.style.background = 'white';
+  overlayElement.style.padding = '10px';
+  overlayElement.style.border = '1px solid black';
+
+  // 创建 overlay
+  this.overlay = new Overlay({
+    element: overlayElement,
+    positioning: 'bottom-center',
+    offset: [0, -20], // 偏移量，用于调整 overlay 的位置
+  });
+
+  // 将 overlay 添加到地图上，并设置其位置为点击的坐标
+  this.map.addOverlay(this.overlay);
+  this.overlay.setPosition(coordinates);
+}
 	}
 }
 </script>
