@@ -101,7 +101,7 @@ export default {
           })
           this.map.addLayer(this.mapLayer)
       // this.map.addLayer(this.mapLayerlabel)
-      // this.loadjson()
+      this.loadjson()
      
      
 
@@ -136,7 +136,8 @@ export default {
           let vector = new VectorLayer({
             source: vectorSource,
             style: this.styleFunction,
-            renderMode: "vector"
+            renderMode: "vector",
+            zIndex: 9999 // 让图层始终添加到底图之上
           });
           this.addLayer(vector,'POI')
         
@@ -160,6 +161,13 @@ export default {
         });
     } else {
         this.map.getTargetElement().style.cursor = "default";
+        // 首先销毁之前的 overlay
+    if (this.overlay) {
+    console.log("消除overlay")
+
+        this.map.removeOverlay(this.overlay);
+        this.overlay = null;
+    }
     }
 });
 
@@ -168,17 +176,20 @@ export default {
 		/******************地图切换方法***************/
 		changeBaseMap: function(value) {
       console.log(value)
+      this.hideOverlay()//消除overlay
       this.map.removeLayer(this.mapLayer)
       this.map.removeLayer(this.mapLayerlabel)
 			switch (value) {
         case 'tdtdz':
           this.mapLayer = new TileLayer({
             source: this.tdtdz,
-            projection: this.proj
+            projection: this.proj,
+            zIndex: 0 // 底图的zIndex设置为最小值
           })
           this.mapLayerlabel = new TileLayer({
             source: this.tdtlabeldz,
-            projection: this.proj
+            projection: this.proj,
+            zIndex: 0 // 底图的zIndex设置为最小值
           })
           this.map.addLayer(this.mapLayer)
           this.map.addLayer(this.mapLayerlabel)
@@ -186,11 +197,13 @@ export default {
         case 'tdtwx':
           this.mapLayer = new TileLayer({
             source: this.tdtwx,
-            projection: this.proj
+            projection: this.proj,
+            zIndex: 0 // 底图的zIndex设置为最小值
           })
           this.mapLayerlabel = new TileLayer({
             source: this.tdtlabelwx,
-            projection: this.proj
+            projection: this.proj,
+            zIndex: 0 // 底图的zIndex设置为最小值
           })
           this.map.addLayer(this.mapLayer)
           this.map.addLayer(this.mapLayerlabel)
@@ -198,18 +211,21 @@ export default {
         case 'gaodedz':
           this.mapLayer = new TileLayer({
             source: this.gaodedz,
-            projection: this.proj
+            projection: this.proj,
+            zIndex: 0 // 底图的zIndex设置为最小值
           })
           this.map.addLayer(this.mapLayer)
           break;
         case 'gaodewx':
           this.mapLayer = new TileLayer({
             source: this.gaodewx,
-            projection: this.proj
+            projection: this.proj,
+            zIndex: 0 // 底图的zIndex设置为最小值
           })
           this.mapLayerlabel = new TileLayer({
             source: this.gaodelabelwx,
-            projection: this.proj
+            projection: this.proj,
+            zIndex: 0 // 底图的zIndex设置为最小值
           })
           this.map.addLayer(this.mapLayer)
           this.map.addLayer(this.mapLayerlabel)
@@ -217,33 +233,37 @@ export default {
         case 'geoqcs':
           this.mapLayer = new TileLayer({
             source: this.geoqcs,
-            projection: this.proj
+            projection: this.proj,
+            zIndex: 0 // 底图的zIndex设置为最小值
           })
           this.map.addLayer(this.mapLayer)
           break;
         case 'geoqns':
           this.mapLayer = new TileLayer({
             source: this.geoqns,
-            projection: this.proj
+            projection: this.proj,
+            zIndex: 0 // 底图的zIndex设置为最小值
           })
           this.map.addLayer(this.mapLayer)
           break;
         case 'geoqhs':
           this.mapLayer = new TileLayer({
             source: this.geoqhs,
-            projection: this.proj
+            projection: this.proj,
+            zIndex: 0 // 底图的zIndex设置为最小值
           })
           this.map.addLayer(this.mapLayer)
           break;
         case 'geoqlh':
           this.mapLayer = new TileLayer({
             source: this.geoqlh,
-            projection: this.proj
+            projection: this.proj,
+            zIndex: 0 // 底图的zIndex设置为最小值
           })
           this.map.addLayer(this.mapLayer)
           break;
 			}
-      this.loadjson()
+
 
 		},
     /******************改变JSON样式***************/ 
@@ -310,7 +330,7 @@ export default {
     },
     /******************通过名称移除图层***************/ 
     removeLayerByName(name) {
-     
+      this.hideOverlay()//消除overlay
       const layer = this.layers[name];
       if (layer) {
         this.map.removeLayer(layer);
@@ -322,11 +342,13 @@ export default {
   HeatMap (checked) {
     if(checked){
      let vector = new HeatmapLayer({
+      zIndex: 9999, // 让图层始终添加到底图之上
      // 矢量数据源
        source: new VectorSource({
          features: (new GeoJSON()).readFeatures(this.geojson, {
          dataProjection: 'EPSG:4326',
-         featureProjection: 'EPSG:3857'
+         featureProjection: 'EPSG:3857',
+
      }),
        }),
        blur: 20, // 模糊尺寸
@@ -344,11 +366,13 @@ export default {
    showOverlayOnClick(name,province,event) {
     // 首先销毁之前的 overlay
     if (this.overlay) {
+    console.log("消除overlay")
+
         this.map.removeOverlay(this.overlay);
         this.overlay = null;
     }
 
-    console.log("进入了showOverlayOnClick")
+    // console.log("进入了showOverlayOnClick")
   // 获取点击坐标
   const coordinates = event.coordinate;
 console.log(coordinates)
@@ -361,6 +385,8 @@ console.log(coordinates)
   overlayElement.style.border = '1px solid black';
 
   // 创建 overlay
+  console.log("创建overlay")
+
   this.overlay = new Overlay({
     element: overlayElement,
     positioning: 'bottom-center',
@@ -370,7 +396,14 @@ console.log(coordinates)
   // 将 overlay 添加到地图上，并设置其位置为点击的坐标
   this.map.addOverlay(this.overlay);
   this.overlay.setPosition(coordinates);
-}
+},
+  // 隐藏 overlay
+  hideOverlay() {
+    if (this.overlay) {
+      this.map.removeOverlay(this.overlay);
+      this.overlay = null;
+    }
+  },
 	}
 }
 </script>

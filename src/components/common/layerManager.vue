@@ -2,7 +2,7 @@
   <el-checkbox-group v-model="checkList" id="mouse-position">
     <p class="title" style="font-size: 20px;">图层选择器</p>
 
-    <el-checkbox label="公园POI点" @change="poi"></el-checkbox>
+    <el-checkbox label="公园POI点" checked @change="poi"></el-checkbox>
     <el-checkbox label="热力图" @change="heatmap"></el-checkbox>
     <el-checkbox label="萤火图" @change="yinghuo"></el-checkbox>
   </el-checkbox-group>
