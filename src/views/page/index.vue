@@ -16,9 +16,9 @@
       
     </panel>
 
-    <panel :width="940" :height="380" position="absolute" :top="590" :left="490" class="p20">
-      <p class="panel-title">echart图表</p>
-  
+    <panel :width="940" :height="380" position="absolute" :top="590" :left="490">
+      <!-- <p class="panel-title">echart图表</p> -->
+    <ParksTable/>
     </panel>
 
     <panel :width="470" :height="480" position="absolute" :top="490" :left="1450" >
@@ -58,7 +58,8 @@ import galleryBox from '@/components/common/galleryBox';
 import ganttChart from '@/components/common/ganttChart';
 import layerManager from '@/components/common/layerManager.vue';
 import ol_Home from '@/components/openlayers/ol_Home';
-// import ShowGeoJSON from '@/components/openlayers/ShowGeoJSON';
+import ParksTable from '@/components/common/ParksTable.vue';
+
 
 export default {
   components: {
@@ -70,7 +71,8 @@ export default {
     echartsAreas,
     echartsRank,
     ol_Home,
-    layerManager
+    layerManager,
+    ParksTable
   },
   data() {
     return {
