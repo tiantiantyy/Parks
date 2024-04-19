@@ -103,7 +103,7 @@ export default {
       // this.map.addLayer(this.mapLayerlabel)
       this.loadjson()
      
-     
+
 
       //实例化一个自定义样式的鹰眼空间并加入地图中
       // this.map.addControl(
