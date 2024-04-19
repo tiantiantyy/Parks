@@ -1,21 +1,20 @@
 <template>
   <div class="parent-comment">
-    <div v-for="(comment, index) in comments" :key="index" class="comment-item">
+    <div v-for="(comment, index) in commentsData" :key="index" class="comment-item">
       <div class="comment-inner-container">
-        <div class="avatar"></div>
         <div class="right">
-          <div class="username">{{ comment.username }}</div>
-          <div class="comment-content">{{ comment.content }}</div>
-          <div class="comment-time">{{ comment.time }}</div>
+          <div class="username">{{ commentsData[index]['评论者昵称']}}</div>
+          <div class="comment-content">{{ commentsData[index]['评论内容'] }}</div>
+          <div class="comment-time">{{  commentsData[index]['评论时间']  }}</div>
           <div class="comment-info">
-            <ul>
+            <!-- <ul>
               <li>
                 <i class="el-icon-s-comment"></i> {{ comment.commentCount }}
               </li>
               <li>
                 <i class="el-icon-caret-top"></i> {{ comment.likeCount }}
               </li>
-            </ul>
+            </ul> -->
         
         </div>
     </div>
@@ -25,86 +24,26 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   data() {
     return {
-      comments: [
-        {
-          username: "User1",
-          userId: "123",
-          content: "This is a comment.",
-          time: "2024-04-12 10:00:00",
-          commentCount: 5,
-          likeCount: 10
-        },
-        {
-          username: "User2",
-          userId: "456",
-          content: "Another comment here.",
-          time: "2024-04-12 11:00:00",
-          commentCount: 3,
-          likeCount: 8
-        },
-        {
-          username: "User3",
-          userId: "456",
-          content: "Another comment here.",
-          time: "2024-04-12 11:00:00",
-          commentCount: 3,
-          likeCount: 8
-        },
-        {
-          username: "User4",
-          userId: "456",
-          content: "Another comment here.",
-          time: "2024-04-12 11:00:00",
-          commentCount: 3,
-          likeCount: 8
-        },
-        {
-          username: "User5",
-          userId: "456",
-          content: "Another comment here.",
-          time: "2024-04-12 11:00:00",
-          commentCount: 3,
-          likeCount: 8
-        },
-        {
-          username: "User6",
-          userId: "456",
-          content: "Another comment here.",
-          time: "2024-04-12 11:00:00",
-          commentCount: 3,
-          likeCount: 8
-        },
-        {
-          username: "User7",
-          userId: "456",
-          content: "Another comment here.",
-          time: "2024-04-12 11:00:00",
-          commentCount: 3,
-          likeCount: 8
-        },
-        {
-          username: "User8",
-          userId: "456",
-          content: "Another comment here.",
-          time: "2024-04-12 11:00:00",
-          commentCount: 3,
-          likeCount: 8
-        },
-        {
-          username: "User9",
-          userId: "456",
-          content: "Another comment here.",
-          time: "2024-04-12 11:00:00",
-          commentCount: 3,
-          likeCount: 8
-        },
-
-        // Add more comments as needed
-      ]
+      commentsData: []
     };
+  },
+  mounted(){
+    this.queryInfo()
+  },
+  methods:{
+    queryInfo () {
+             axios.get('http://localhost:3000/api/user/comments').then((response) => {
+            this.commentsData=response.data
+            console.log(this.commentsData)
+            console.log(this.commentsData[0]['评论者昵称'])
+//          console.log(response.data)
+//          console.log('--------')
+         })
+      },
   }
 };
 </script>
@@ -116,6 +55,7 @@ export default {
     margin-left: 10px;
     text-align: left;
     .username{
+      height:20px;
       line-height: 18px;
       color: #888;
     }
@@ -135,13 +75,6 @@ export default {
   display: flex;
   align-items: left;
   margin-bottom: 5px;
-}
-
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #ccc; /* Placeholder for avatar */
 }
 
 .user-id {
@@ -172,6 +105,7 @@ export default {
 
 .comment-content {
   margin-top:4px;
+  word-wrap: break-word; /* 当单词溢出容器时换行 */
 }
 ul {
   list-style: none; /* 移除项目符号 */
