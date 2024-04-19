@@ -1,3 +1,4 @@
+import 'reset-css'
 import '@/assets/style/style.less'
 import '@/plugins/element'
 import '@/plugins/vcharts'
@@ -5,11 +6,11 @@ import router from '@/router'
 import store from '@/store'
 import 'babel-polyfill'
 import ElementUI from 'element-ui'
+
 import 'element-ui/lib/theme-chalk/index.css'
-import 'reset-css'
+
 import Vue from 'vue'
 import App from './App.vue'
-
 Vue.use(ElementUI);
 
 
