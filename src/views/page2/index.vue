@@ -7,7 +7,7 @@
     <panel :width="940" :height="560" position="absolute" :top="0" :left="490" >
       <ol_Media/>
     </panel>
-    <panel :width="470" :height="970" position="absolute" :top="0" :left="1450" class="comments">
+    <panel :width="470" :height="970" position="absolute" :top="0" :left="1450" class="comments p20">
       <Comments/>
     </panel>
 
@@ -54,7 +54,7 @@ export default {
 
 <style lang="less" scoped>
 .comments{
-  padding: 10px;
+  // padding: 10px;
   overflow: scroll!important;;
 }
 </style>

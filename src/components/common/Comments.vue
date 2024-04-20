@@ -38,8 +38,8 @@ export default {
     queryInfo () {
              axios.get('http://localhost:3000/api/user/comments').then((response) => {
             this.commentsData=response.data
-            console.log(this.commentsData)
-            console.log(this.commentsData[0]['评论者昵称'])
+            // console.log(this.commentsData)
+            // console.log(this.commentsData[0]['评论者昵称'])
 //          console.log(response.data)
 //          console.log('--------')
          })
