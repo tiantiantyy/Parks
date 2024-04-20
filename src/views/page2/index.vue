@@ -5,6 +5,7 @@
     </panel>
 
     <panel :width="940" :height="560" position="absolute" :top="0" :left="490" >
+      <ol_Media/>
     </panel>
     <panel :width="470" :height="970" position="absolute" :top="0" :left="1450" class="comments">
       <Comments/>
@@ -24,7 +25,6 @@
 import echartsAreas from '@/components/common/chartStatistics/echartsAreas.vue';
 import echartsRank from '@/components/common/chartStatistics/echartsRank.vue';
 
-
 import Comments from '@/components/common/Comments.vue';
 import ParksPost from '@/components/common/ParksPost.vue';
 import statisticsByBar from '@/components/common/chartStatistics/statisticsByBar';
@@ -32,6 +32,8 @@ import statisticsByBarAndLine from '@/components/common/chartStatistics/statisti
 import statisticsByLine from '@/components/common/chartStatistics/statisticsByLine';
 import galleryBox from '@/components/common/galleryBox';
 import ganttChart from '@/components/common/ganttChart';
+// import ol_Home from '@/components/openlayers/ol_Home';
+import ol_Media from '../../components/openlayers/ol_Media.vue';
 
 export default {
   components: {
@@ -43,7 +45,8 @@ export default {
     echartsAreas,
     echartsRank,
     Comments,
-    ParksPost
+    ParksPost,
+    ol_Media
    
   },
 }
