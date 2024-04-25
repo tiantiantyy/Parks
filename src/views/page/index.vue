@@ -6,7 +6,8 @@
 
     <panel :width="940" :height="560" position="absolute" :top="0" :left="490" >
 
-     <ol_Home/>
+     <ol_Home @one-park-click="showOverlayOnClick" />
+     <ParksInfo v-if="isInfoWindowVisible" :parkInfo="selectedPark" @close="closeInfoWindow"  />
     </panel>
     <panel :width="470" :height="460" position="absolute" :top="0" :left="1450" class="p20">
     
@@ -46,9 +47,7 @@
 </template>
 
 <script>
-import { imgListDataSource, progressDataSource } from '@/common/mockData';
-import { randomArray, randomChartList } from '@/common/utils';
-
+import ParksTable from '@/components/common/ParksTable.vue';
 import echartsAreas from '@/components/common/chartStatistics/echartsAreas.vue';
 import echartsRank from '@/components/common/chartStatistics/echartsRank.vue';
 import statisticsByBar from '@/components/common/chartStatistics/statisticsByBar';
@@ -58,7 +57,7 @@ import galleryBox from '@/components/common/galleryBox';
 import ganttChart from '@/components/common/ganttChart';
 import layerManager from '@/components/common/layerManager.vue';
 import ol_Home from '@/components/openlayers/ol_Home';
-import ParksTable from '@/components/common/ParksTable.vue';
+import ParksInfo from '@/components/common/ParksInfo';
 
 
 export default {
@@ -72,50 +71,31 @@ export default {
     echartsRank,
     ol_Home,
     layerManager,
-    ParksTable
+    ParksTable,
+    ParksInfo,
+ 
   },
   data() {
     return {
-      minDate: '2018-02-15',
-      maxDate: '2020-05-11',
-      progressDataSource: [...progressDataSource],
-      dataSource: [...imgListDataSource],
-      xAxisData: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-      dataSourceByChart: [
-        {
-          name: '项目进度',
-          lineColor: '#2E76D6',
-          offsetTopColor: 'rgba(46,118,214,0.7)',
-          offsetBottomColor: 'rgba(46,118,214,1)',
-          data: randomChartList(12, '%')
-        },
-        {
-          name: '项目进度2',
-          lineColor: '#02c8dc',
-          offsetTopColor: 'rgba(2,200,220,0.7)',
-          offsetBottomColor: 'rgba(2,200,220,1)',
-          data: randomChartList(12, '%')
-        }
-      ],
-      dataSourceByChart2: [
-        {
-          type: 'bar',
-          name: '项目进度',
-          color: '#2E76D6',
-          offsetTopColor: 'rgba(46,118,214,0.7)',
-          offsetBottomColor: 'rgba(46,118,214,1)',
-          data: randomArray(12)
-        },
-        {
-          type: 'line',
-          name: '项目进度2',
-          color: '#02c8dc',
-          offsetTopColor: 'rgba(2,200,220,0.7)',
-          offsetBottomColor: 'rgba(2,200,220,1)',
-          data: randomArray(12)
-        }
-      ]
+      isInfoWindowVisible: false, // 控制信息窗口的显示状态
+      selectedPark: null // 存储当前选中的地质公园信息
     }
+  },
+  methods:{
+    // 地图上地质公园点位的点击事件处理函数
+    showOverlayOnClick(parkInfo) {
+      // 设置当前选中的地质公园信息，并显示信息窗口
+    
+      this.selectedPark = parkInfo;
+      this.isInfoWindowVisible = true;
+    },
+    closeInfoWindow(){
+      console.log("关闭")
+
+      this.isInfoWindowVisible = false;
+
+    }
+  
   }
 }
 </script>
@@ -130,5 +110,6 @@ export default {
     transform: translateX(20px);
   }
 }
+
 </style>
 

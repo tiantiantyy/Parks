@@ -16,7 +16,6 @@
 <script>
 import geoparks from "@/assets/geoparks.geojson"
 import Map from 'ol/Map'
-import Overlay from 'ol/Overlay'
 import View from 'ol/View'
 import GeoJSON from "ol/format/GeoJSON"
 import { Heatmap as HeatmapLayer } from 'ol/layer.js'
@@ -102,23 +101,6 @@ export default {
           this.map.addLayer(this.mapLayer)
       // this.map.addLayer(this.mapLayerlabel)
       this.loadjson()
-     
-
-
-      //实例化一个自定义样式的鹰眼空间并加入地图中
-      // this.map.addControl(
-      //   new OverviewMap({
-      //       //鹰眼控件样式 overviewmap-custom
-      //       className:'ol-overviewmap ol-custom-overviewmap',
-      //       //鹰眼中加载同坐标系下不同数据源的图层
-      //       layers:[this.mapLayer],                               //要获取当前图层
-      //       //鹰眼控件展开时功能按钮上的标识(网页的JS字符编码)
-      //       collapseLabel:'\u00BB',
-      //       //鹰眼控件折叠时功能按钮上的标识(网页的JS字符编码)
-      //       label:'\u00AB',
-      //       //功能按钮的初始显示方式设置为展开
-      //       collapsed:false
-      //   }))
     },
     /******************加载GeoJSON图层***************/
     loadjson:function(checked=true){
@@ -155,9 +137,14 @@ export default {
         this.map.forEachFeatureAtPixel(evt.pixel, (feature) => {
             // console.log(feature);
             let name = feature.get("name");
-            let province=feature.get("province")
+            let province =feature.get("province")
             console.log(name);
-            this.showOverlayOnClick(name,province, evt);
+            let parkInfo = {
+                name,
+                province
+            };
+            // this.showOverlayOnClick(name,province, evt);
+            this.showOverlayOnClick(parkInfo);
         });
     } else {
         this.map.getTargetElement().style.cursor = "default";
@@ -363,39 +350,46 @@ export default {
       }
    },
   /******************鼠标点击geojson的响应函数***************/ 
-   showOverlayOnClick(name,province,event) {
-    // 首先销毁之前的 overlay
-    if (this.overlay) {
-    console.log("消除overlay")
+//    showOverlayOnClick(name,province,event) {
+//     // 首先销毁之前的 overlay
+//     if (this.overlay) {
+//     console.log("消除overlay")
 
-        this.map.removeOverlay(this.overlay);
-        this.overlay = null;
-    }
+//         this.map.removeOverlay(this.overlay);
+//         this.overlay = null;
+//     }
 
-    // console.log("进入了showOverlayOnClick")
-  // 获取点击坐标
-  const coordinates = event.coordinate;
-console.log(coordinates)
-  // 创建 overlay 元素
-  const overlayElement = document.createElement('div');
-  overlayElement.className = 'custom-overlay';
-  overlayElement.innerHTML = `<div class="overlay-content">${name}</div><br><p>${province}</p>`;
-  overlayElement.style.background = 'white';
-  overlayElement.style.padding = '10px';
-  overlayElement.style.border = '1px solid black';
+//     // console.log("进入了showOverlayOnClick")
+//   // 获取点击坐标
+//   const coordinates = event.coordinate;
+// console.log(coordinates)
+//   // 创建 overlay 元素
+//   const overlayElement = document.createElement('div');
+//   overlayElement.className = 'custom-overlay';
+//   overlayElement.innerHTML = `<div class="overlay-content">${name}</div><br><p>${province}</p>`;
+//   overlayElement.style.background = 'white';
+//   overlayElement.style.padding = '10px';
+//   overlayElement.style.border = '1px solid black';
 
-  // 创建 overlay
-  console.log("创建overlay")
+//   // 创建 overlay
+//   console.log("创建overlay")
 
-  this.overlay = new Overlay({
-    element: overlayElement,
-    positioning: 'bottom-center',
-    offset: [0, -20], // 偏移量，用于调整 overlay 的位置
-  });
+//   this.overlay = new Overlay({
+//     element: overlayElement,
+//     positioning: 'bottom-center',
+//     offset: [0, -20], // 偏移量，用于调整 overlay 的位置
+//   });
 
-  // 将 overlay 添加到地图上，并设置其位置为点击的坐标
-  this.map.addOverlay(this.overlay);
-  this.overlay.setPosition(coordinates);
+//   // 将 overlay 添加到地图上，并设置其位置为点击的坐标
+//   this.map.addOverlay(this.overlay);
+//   this.overlay.setPosition(coordinates);
+// },
+
+//测试公园POI点位窗口
+showOverlayOnClick(parkInfo) {
+    // 当点击地质公园点位时，触发该事件，并将地质公园信息传递给父组件
+    console.log("this.$emit('one-park-click', parkInfo);")
+    this.$emit('one-park-click', parkInfo);
 },
   // 隐藏 overlay
   hideOverlay() {
