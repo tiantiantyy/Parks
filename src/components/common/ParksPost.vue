@@ -13,8 +13,8 @@
       </div>
       <div class="info">
         <span><img src="../../assets/icon/like.svg"/><i>{{note['点赞数']}}</i></span>
-        <span><img src="../../assets/icon/collect.svg"/><i>{{note['评论数']}}</i></span>
-        <span><img src="../../assets/icon/comments.svg"/><i>{{note['收藏数']}}</i></span>
+        <span><img src="../../assets/icon/collect.svg"/><i>{{note['收藏数']}}</i></span>
+        <span><img src="../../assets/icon/comments.svg"/><i>{{note['评论数']}}</i></span>
       </div>
     </div>
   </div>

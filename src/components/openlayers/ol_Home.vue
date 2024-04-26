@@ -20,18 +20,12 @@ import View from 'ol/View'
 import GeoJSON from "ol/format/GeoJSON"
 import { Heatmap as HeatmapLayer } from 'ol/layer.js'
 import TileLayer from 'ol/layer/Tile'
-import VectorLayer from 'ol/layer/Vector'
 import { transform } from 'ol/proj'
-import { Vector } from 'ol/source'
 import VectorSource from 'ol/source/Vector.js'
-import Circle from 'ol/style/Circle'
-import Fill from 'ol/style/Fill'
-import RegularShape from 'ol/style/RegularShape.js'
-import Stroke from 'ol/style/Stroke'
-import Style from 'ol/style/Style'
-import Text from 'ol/style/Text'
 import mapSources from './modules/maplist'
 
+//导入相关模块
+import { TileWMS } from 'ol/source'
 export default {
 	components: {},
 	data() {
@@ -92,74 +86,74 @@ export default {
         source: this.tdtlabelwx,
         // projection: this.proj
       })
+     
    
       //将图层加载到地图对象
       this.mapLayer = new TileLayer({
             source: this.geoqcs,
             projection: this.proj
           })
-          this.map.addLayer(this.mapLayer)
+      this.map.addLayer(this.mapLayer)
+      
       // this.map.addLayer(this.mapLayerlabel)
       this.loadjson()
     },
-    /******************加载GeoJSON图层***************/
+    /******************加载Geoserver图层***************/
     loadjson:function(checked=true){
       if(checked){
-
-      //初始化json图层
-      let features = (new GeoJSON()).readFeatures(this.geojson);
-          for (let i = 0; i < features.length; i++) {
-            let _geom = features[i].getGeometry();
-            _geom.transform("EPSG:4326", "EPSG:3857");
-          }
-          let vectorSource = new Vector({
-            features: features
-          });
-          let vector = new VectorLayer({
-            source: vectorSource,
-            style: this.styleFunction,
-            renderMode: "vector",
-            zIndex: 9999 // 让图层始终添加到底图之上
-          });
-          this.addLayer(vector,'POI')
-        
+        let layer = new TileLayer({
+        source: new TileWMS({
+          //不能设置为0，否则地图不展示。
+          ratio: 1,
+          url: "http://localhost:8080/geoserver/GeoParks/wms",
+          params: {
+            LAYERS: "GeoParks:geoparks",
+            STYLES: "geoparks_poi_style",
+            VERSION: "1.1.0",
+            tiled: true
+          },
+          serverType: "geoserver",
+        }),
+        zIndex: 9999 // 让图层始终添加到底图之上
+      });
+          this.addLayer(layer,'POI')
         }
           
           else{
             this.removeLayerByName('POI')
           }
-             // 添加地图点击事件监听器
-      // this.map.on('click', this.showOverlayOnClick);
       
-      this.map.on('click', (evt) => {
-    if (this.map.hasFeatureAtPixel(evt.pixel)) {
-        this.map.getTargetElement().style.cursor = "pointer";
-        this.map.forEachFeatureAtPixel(evt.pixel, (feature) => {
-            // console.log(feature);
-            let name = feature.get("name");
-            let province =feature.get("province")
-            console.log(name);
-            let parkInfo = {
-                name,
-                province
-            };
-            // this.showOverlayOnClick(name,province, evt);
-            this.showOverlayOnClick(parkInfo);
-        });
-    } else {
-        this.map.getTargetElement().style.cursor = "default";
-        // 首先销毁之前的 overlay
-    if (this.overlay) {
-    console.log("消除overlay")
+//       this.map.on('click', (evt) => {
+//     if (this.map.hasFeatureAtPixel(evt.pixel)) {
+//         this.map.getTargetElement().style.cursor = "pointer";
+//         this.map.forEachFeatureAtPixel(evt.pixel, (feature) => {
+//             // console.log(feature);
+//             let name = feature.get("name");
+//             let province =feature.get("province")
+//             console.log(name);
+//             let parkInfo = {
+//                 name,
+//                 province
+//             };
+//             // this.showOverlayOnClick(name,province, evt);
+//             this.showOverlayOnClick(parkInfo);
+//         });
+//     } else {
+//         this.map.getTargetElement().style.cursor = "default";
+//         // 首先销毁之前的 overlay
+//     if (this.overlay) {
+//     console.log("消除overlay")
 
-        this.map.removeOverlay(this.overlay);
-        this.overlay = null;
-    }
-    }
-});
+//         this.map.removeOverlay(this.overlay);
+//         this.overlay = null;
+//     }
+//     }
+// }
+// );
 
     
     },
+
 		/******************地图切换方法***************/
 		changeBaseMap: function(value) {
       console.log(value)
@@ -253,62 +247,122 @@ export default {
 
 
 		},
-    /******************改变JSON样式***************/ 
-    styleFunction(feature) {
-      let stroke = new Stroke({
-        color: 'black',
-        width: 2
-      });
-      let fill = new Fill({
-        color: 'red'
-      });
-      let _name = feature.get("name");
-      // _name = this.map.getView().getZoom() > 5 ? _name : "";
-      _name = _name;
-      let _radius = 8,
-        _radius2 = 8;
-      if (_name === "北京") {
-        _radius = 12;
-        _radius2 = 6;
-      }
-      let styles = [];
-      styles.push(new Style({
-        stroke: stroke,
-        fill: fill,
-        image: new RegularShape({
-          fill: fill,
-          stroke: stroke,
-          points: 5,
-          radius: _radius,
-          radius2: _radius2,
-          angle: 0
-        }),
-        text: new Text({
-          text: _name,
-          textAlign: "left",
-          offsetX: 12,
-          font: "bold 11px sans-serif",
-          fill: new Fill({
-            color: 'red'
-          }),
-          stroke: new Stroke({
-            color: 'white',
-            width: 2
-          })
-        })
-      }));
-      styles.push(new Style({
-        geometry: feature.getGeometry(),
-        image: new Circle({
-          radius: 4,
-          fill: new Fill({
-            color: "white"
-          })
-        })
-      }));
 
-      return styles;
-    },
+        /******************加载GeoJSON图层***************/
+//     loadjson:function(checked=true){
+//       if(checked){
+
+//       //初始化json图层
+//       let features = (new GeoJSON()).readFeatures(this.geojson);
+//           for (let i = 0; i < features.length; i++) {
+//             let _geom = features[i].getGeometry();
+//             _geom.transform("EPSG:4326", "EPSG:3857");
+//           }
+//           let vectorSource = new Vector({
+//             features: features
+//           });
+//           let vector = new VectorLayer({
+//             source: vectorSource,
+//             style: this.styleFunction,
+//             renderMode: "vector",
+//             zIndex: 9999 // 让图层始终添加到底图之上
+//           });
+//           this.addLayer(vector,'POI')
+        
+//         }
+          
+//           else{
+//             this.removeLayerByName('POI')
+//           }
+//              // 添加地图点击事件监听器
+//       // this.map.on('click', this.showOverlayOnClick);
+      
+//       this.map.on('click', (evt) => {
+//     if (this.map.hasFeatureAtPixel(evt.pixel)) {
+//         this.map.getTargetElement().style.cursor = "pointer";
+//         this.map.forEachFeatureAtPixel(evt.pixel, (feature) => {
+//             // console.log(feature);
+//             let name = feature.get("name");
+//             let province =feature.get("province")
+//             console.log(name);
+//             let parkInfo = {
+//                 name,
+//                 province
+//             };
+//             // this.showOverlayOnClick(name,province, evt);
+//             this.showOverlayOnClick(parkInfo);
+//         });
+//     } else {
+//         this.map.getTargetElement().style.cursor = "default";
+//         // 首先销毁之前的 overlay
+//     if (this.overlay) {
+//     console.log("消除overlay")
+
+//         this.map.removeOverlay(this.overlay);
+//         this.overlay = null;
+//     }
+//     }
+// });
+
+    
+//     },
+
+    /******************改变JSON样式***************/ 
+    // styleFunction(feature) {
+    //   let stroke = new Stroke({
+    //     color: 'black',
+    //     width: 2
+    //   });
+    //   let fill = new Fill({
+    //     color: 'red'
+    //   });
+    //   let _name = feature.get("name");
+    //   // _name = this.map.getView().getZoom() > 5 ? _name : "";
+    //   _name = _name;
+    //   let _radius = 8,
+    //     _radius2 = 8;
+    //   if (_name === "北京") {
+    //     _radius = 12;
+    //     _radius2 = 6;
+    //   }
+    //   let styles = [];
+    //   styles.push(new Style({
+    //     stroke: stroke,
+    //     fill: fill,
+    //     image: new RegularShape({
+    //       fill: fill,
+    //       stroke: stroke,
+    //       points: 5,
+    //       radius: _radius,
+    //       radius2: _radius2,
+    //       angle: 0
+    //     }),
+    //     text: new Text({
+    //       text: _name,
+    //       textAlign: "left",
+    //       offsetX: 12,
+    //       font: "bold 11px sans-serif",
+    //       fill: new Fill({
+    //         color: 'red'
+    //       }),
+    //       stroke: new Stroke({
+    //         color: 'white',
+    //         width: 2
+    //       })
+    //     })
+    //   }));
+    //   styles.push(new Style({
+    //     geometry: feature.getGeometry(),
+    //     image: new Circle({
+    //       radius: 4,
+    //       fill: new Fill({
+    //         color: "white"
+    //       })
+    //     })
+    //   }));
+
+    //   return styles;
+    // },
     /******************添加图层并存储到 layers 对象中***************/ 
     addLayer(layer, name) {
       this.map.addLayer(layer);
