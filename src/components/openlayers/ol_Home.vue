@@ -60,7 +60,8 @@ export default {
 			mapLayerlabel: null,
       geojson: geoparks,
       overlay:null,//弹窗
-      selectTableData:[],//
+      selectTableData:[],//点选中的park信息
+     
 		}
 	},
   watch: {
@@ -131,15 +132,7 @@ export default {
       
       // this.map.addLayer(this.mapLayerlabel)
       this.loadjson()
-
-      // // 创建点选交互
-      // let select = new Select({
-      //   condition: singleClick,
-      //   hitTolerance:100,
-      // });
-      // // 将交互添加到地图中
-      // this.map.addInteraction(select);
-
+      const self = this;
       this.map.on('click',event=>{
       
         let coor=event.coordinate;
@@ -191,11 +184,17 @@ export default {
                 }
             })
             .then(function (response) {
-                console.log(response.data);
-                self.selectTableData=response.data
+                // console.log(response.data)
+                self.PointSelectPark=response.data[0];
+                let parkInfo=self.PointSelectPark;
+                self.delayParkInfo(parkInfo);
+                // console.log(self.PointSelectPark);
+                // console.log(self.PointSelectPark['DETAILS']);
+
             })
             .catch(function (error) {
-              self.selectTableData=[]
+              self.PointSelectPark=[]
+
                 console.log(error);
             });
         })
@@ -686,6 +685,9 @@ showOverlayOnClick(parkInfo) {
       this.overlay = null;
     }
   },
+  delayParkInfo(parkInfo){
+    this.$bus.$emit('park', parkInfo);
+  }
 
 	}
 }

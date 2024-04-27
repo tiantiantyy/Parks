@@ -5,25 +5,18 @@
     </panel>
 
     <panel :width="940" :height="560" position="absolute" :top="0" :left="490" >
-
+      <div class="buttons">
+      <button @click="StartPolygonSelect">框选</button>
+      <button @click="StopPolygonSelect">箭头</button>
+    </div>
      <ol_Home @one-park-click="showOverlayOnClick"/>
      <ParksInfo v-if="isInfoWindowVisible" :parkInfo="selectedPark" @close="closeInfoWindow"  />
     </panel>
-    <panel :width="470" :height="460" position="absolute" :top="0" :left="1450" class="p20">
-    
+    <panel :width="470" :height="970" position="absolute" :top="0" :left="1450" class="p20">
+      <ParksDetails/>
     </panel>
     
     <panel :width="470" :height="480" position="absolute" :top="490" :left="0" >
-      <button @click="StartPolygonSelect">框选</button>
-      <button @click="StopPolygonSelect">箭头</button>
-    </panel>
-
-    <panel :width="940" :height="380" position="absolute" :top="590" :left="490">
-      <!-- <p class="panel-title">echart图表</p> -->
-    <ParksTable/>
-    </panel>
-
-    <panel :width="470" :height="480" position="absolute" :top="490" :left="1450" >
       <el-tabs type="border-card" style="width: 100%; height: 100%;">
           <el-tab-pane class="card-display" label="面积排行" >
             <h1 class="etitle">地质公园面积排行</h1> 
@@ -44,10 +37,16 @@
           </el-tab-pane>
   </el-tabs>
     </panel>
+
+    <panel :width="940" :height="380" position="absolute" :top="590" :left="490">
+      <!-- <p class="panel-title">echart图表</p> -->
+    <ParksTable/>
+    </panel>
   </section>
 </template>
 
 <script>
+import ParksDetails from '@/components/common/ParksDetails';
 import ParksInfo from '@/components/common/ParksInfo';
 import ParksTable from '@/components/common/ParksTable.vue';
 import echartsAreas from '@/components/common/chartStatistics/echartsAreas.vue';
@@ -74,6 +73,7 @@ export default {
     layerManager,
     ParksTable,
     ParksInfo,
+    ParksDetails
  
   },
   data() {
