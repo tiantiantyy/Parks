@@ -31,7 +31,10 @@ import Draw from 'ol/interaction/Draw';
 import VectorLayer from 'ol/layer/Vector';
 import TileWMS from 'ol/source/TileWMS.js';
 import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
-// 导入所需的类
+
+//导入点选相关模块
+import Point from 'ol/geom/Point.js';
+import { transformExtent } from 'ol/proj';
 export default {
 	components: {},
 	data() {
@@ -129,7 +132,75 @@ export default {
       // this.map.addLayer(this.mapLayerlabel)
       this.loadjson()
 
-   
+      // // 创建点选交互
+      // let select = new Select({
+      //   condition: singleClick,
+      //   hitTolerance:100,
+      // });
+      // // 将交互添加到地图中
+      // this.map.addInteraction(select);
+
+      this.map.on('click',event=>{
+      
+        let coor=event.coordinate;
+        let coor4326 = transform(coor, 'EPSG:3857', 'EPSG:4326'); // 将坐标从 EPSG:3857 转换成 EPSG:4326
+
+        // 计算容差范围
+        let tolerance = 100000; // 容差值，单位为像素
+        let extent = [
+        coor[0] - tolerance,
+        coor[1] - tolerance,
+        coor[0] + tolerance,
+        coor[1] + tolerance
+        ];
+        // 将容差范围转换为地图投影坐标系下的范围
+        let mapExtent = transformExtent(extent, 'EPSG:3857', 'EPSG:4326');
+        let point = new Point(coor4326);
+  
+        /// 创建 WFS GetFeature 请求对象
+        const featureRequest = new WFS().writeGetFeature({
+          srsName: 'EPSG:4326',
+          featureNS: 'http://geoserver/geoparks',
+          featurePrefix: 'GeoParks',
+          featureTypes: ['GeoParks:geoparks'],
+          outputFormat: 'application/json',
+          geometryName:'the_geom',
+          bbox: mapExtent, // 添加转换后的范围作为 bbox 参数
+        });
+        console.log(featureRequest);  //打印已选择的Feature
+
+        // 发送请求
+        fetch('http://localhost:8080/geoserver/' + 'wfs', {
+          method: 'POST',
+          body: new XMLSerializer().serializeToString(featureRequest),
+      })
+        .then(function (response) {
+          console.log(response)
+          return response.json();
+        })
+        .then(function (json) {
+          const feature = new GeoJSON().readFeatures(json);
+          // console.log(feature)
+          const NAME = feature[0].values_['NAME']; //获取框选的公园名称
+          console.log(NAME)
+
+          //向后端传参框选得到的地质公园名称
+            axios.get('http://localhost:3000/api/user/PointSelect', {
+                params: {
+                    parameter: NAME
+                }
+            })
+            .then(function (response) {
+                console.log(response.data);
+                self.selectTableData=response.data
+            })
+            .catch(function (error) {
+              self.selectTableData=[]
+                console.log(error);
+            });
+        })
+    }
+  );
 
     },
     /******************加载Geoserver图层***************/
@@ -360,11 +431,8 @@ export default {
         const NAME = feature.values_['NAME']; //获取框选的公园名称
         nameArray.push(NAME)
         // console.log(NAME);
-
-
       }
         console.log(nameArray);
-
       //向后端传参框选得到的地质公园名称
         axios.get('http://localhost:3000/api/user/PolygonSelect', {
             params: {
@@ -381,7 +449,7 @@ export default {
         });
     }
   ).then(function(){
-      self.stopDrawing() 
+      self.stopDrawing() //框选结束后自动结束绘制
   });
   });
 },
@@ -554,7 +622,7 @@ export default {
           url: "http://localhost:8080/geoserver/GeoParks/wms",
           params: {
             LAYERS: "GeoParks:geoparks",
-            STYLES: "geoparks",
+            STYLES: "geoparks_notes_style",
             VERSION: "1.1.0",
             tiled: true
           },
