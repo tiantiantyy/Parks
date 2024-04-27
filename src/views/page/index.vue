@@ -14,8 +14,8 @@
     </panel>
     
     <panel :width="470" :height="480" position="absolute" :top="490" :left="0" >
-      <button @click="PolygonSelectedPark">框选</button>
-      <button @click="">箭头</button>
+      <button @click="StartPolygonSelect">框选</button>
+      <button @click="StopPolygonSelect">箭头</button>
     </panel>
 
     <panel :width="940" :height="380" position="absolute" :top="590" :left="490">
@@ -94,9 +94,12 @@ export default {
       console.log("关闭")
       this.isInfoWindowVisible = false;
     },
-    PolygonSelectedPark(){
-      this.$bus.$emit('PolygonSelect');
-      // console.log("发送PolygonSelect");
+    StartPolygonSelect(){
+
+      this.$bus.$emit('ifStartPolygonSelect');
+    },
+    StopPolygonSelect(){
+      this.$bus.$emit('StopPolygonSelect');
     }
   
   }

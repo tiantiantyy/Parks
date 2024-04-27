@@ -74,15 +74,24 @@ export default {
     this.$bus.$on('LoadHeatMap',(checked)=>{
       this.HeatMap(checked)
     })
-    this.$bus.$on('PolygonSelect',()=>{
-      this.PolygonSelect()
+    this.$bus.$on('LoadNotesMap',(checked)=>{
+      this.NotesMap(checked)
     })
+    this.$bus.$on('StartPolygonSelect',()=>{
+      this.startDrawing()
+    })
+    this.$bus.$on('StopPolygonSelect',()=>{
+      this.stopDrawing()
+    })
+
   },
   beforeDestroy() {
         // 组件销毁前移除事件监听器
         this.$bus.$off('LoadGeoJson');
         this.$bus.$off('LoadHeatMap');
-        this.$bus.$off('PolygonSelect');
+        this.$bus.$off('LoadNotesMap');
+        this.$bus.$off('StartPolygonSelect');
+        this.$bus.$off('StopPolygonSelect');
     },
   methods: {
     initMap(){
@@ -272,6 +281,18 @@ export default {
 
 
 		},
+    /******************框选开启和关闭***************/
+    startDrawing() {
+      // 启动绘制状态
+      this.PolygonSelect();
+    },
+    stopDrawing() {
+      // 停止绘制状态的逻辑
+      const drawInteraction = this.map.getInteractions().getArray().find(interaction => interaction instanceof Draw);
+      if (drawInteraction) {
+        this.map.removeInteraction(drawInteraction);
+      }
+    },
     PolygonSelect(){
         console.log("PolygonSelect被调用了")
        // 创建一个矢量图层用于显示绘制的几何图形
@@ -321,6 +342,7 @@ export default {
       filter:polygonFilter // 使用几何过滤器作为查询条件
     });
     
+
     // 发送请求
     fetch('http://localhost:8080/geoserver/' + 'wfs', {
       method: 'POST',
@@ -339,7 +361,6 @@ export default {
         nameArray.push(NAME)
         // console.log(NAME);
 
-   
 
       }
         console.log(nameArray);
@@ -358,9 +379,13 @@ export default {
           self.selectTableData=[]
             console.log(error);
         });
-    });
+    }
+  ).then(function(){
+      self.stopDrawing() 
   });
-    },
+  });
+},
+
     /******************加载GeoJSON图层***************/
 //     loadjson:function(checked=true){
 //       if(checked){
@@ -519,6 +544,31 @@ export default {
 
       }
    },
+  /******************创建一个笔记分级符号图层***************/
+  NotesMap(checked){
+    if(checked){
+        let layer = new TileLayer({
+        source: new TileWMS({
+          //不能设置为0，否则地图不展示。
+          ratio: 1,
+          url: "http://localhost:8080/geoserver/GeoParks/wms",
+          params: {
+            LAYERS: "GeoParks:geoparks",
+            STYLES: "geoparks",
+            VERSION: "1.1.0",
+            tiled: true
+          },
+          serverType: "geoserver",
+        }),
+        zIndex: 9999 // 让图层始终添加到底图之上
+      });
+          this.addLayer(layer,'Notes')
+        }
+          
+          else{
+            this.removeLayerByName('Notes')
+          }
+  },
   /******************鼠标点击geojson的响应函数***************/ 
 //    showOverlayOnClick(name,province,event) {
 //     // 首先销毁之前的 overlay
