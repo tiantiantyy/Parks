@@ -14,22 +14,23 @@
 </template>
 
 <script>
-import geoparks from "@/assets/geoparks.geojson"
-import Map from 'ol/Map'
-import View from 'ol/View'
-import { Heatmap as HeatmapLayer } from 'ol/layer.js'
-import TileLayer from 'ol/layer/Tile'
-import { transform } from 'ol/proj'
-import VectorSource from 'ol/source/Vector.js'
-import mapSources from './modules/maplist'
+import geoparks from "@/assets/geoparks.geojson";
+import Map from 'ol/Map';
+import View from 'ol/View';
+import { Heatmap as HeatmapLayer } from 'ol/layer.js';
+import TileLayer from 'ol/layer/Tile';
+import { transform } from 'ol/proj';
+import VectorSource from 'ol/source/Vector.js';
+import mapSources from './modules/maplist';
 
 //导入框选相关模块
-import { GeoJSON, WFS } from 'ol/format.js'
-import Intersects from 'ol/format/filter/Intersects.js'
-import Draw from 'ol/interaction/Draw'
-import VectorLayer from 'ol/layer/Vector'
-import TileWMS from 'ol/source/TileWMS.js'
-import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style'
+import axios from 'axios';
+import { GeoJSON, WFS } from 'ol/format.js';
+import Intersects from 'ol/format/filter/Intersects.js';
+import Draw from 'ol/interaction/Draw';
+import VectorLayer from 'ol/layer/Vector';
+import TileWMS from 'ol/source/TileWMS.js';
+import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
 // 导入所需的类
 export default {
 	components: {},
@@ -56,8 +57,15 @@ export default {
 			mapLayerlabel: null,
       geojson: geoparks,
       overlay:null,//弹窗
+      selectTableData:[],//
 		}
 	},
+  watch: {
+    selectTableData() {
+      // 当 selectTableData 发生变化时调用 updateTableData 方法
+      this.updateTableData();
+    }
+  },
 	mounted() {
      this.initMap()
      this.$bus.$on('LoadGeoJson',(checked)=>{
@@ -70,6 +78,12 @@ export default {
       this.PolygonSelect()
     })
   },
+  beforeDestroy() {
+        // 组件销毁前移除事件监听器
+        this.$bus.$off('LoadGeoJson');
+        this.$bus.$off('LoadHeatMap');
+        this.$bus.$off('PolygonSelect');
+    },
   methods: {
     initMap(){
        //初始化地图
@@ -289,7 +303,8 @@ export default {
       // 将绘制图层和交互添加到地图中
       this.map.addLayer(vectorLayer);
       this.map.addInteraction(draw);
-
+      //将vue的this保存到一个变量中,防止后续丢失
+     const self = this;
     // 监听绘制结束事件
     draw.on('drawend', event => {
     // 将绘制的多边形转换投影坐标
@@ -305,7 +320,7 @@ export default {
       outputFormat: 'application/json',
       filter:polygonFilter // 使用几何过滤器作为查询条件
     });
-
+    
     // 发送请求
     fetch('http://localhost:8080/geoserver/' + 'wfs', {
       method: 'POST',
@@ -317,16 +332,32 @@ export default {
     })
     .then(function (json) {
       const features = new GeoJSON().readFeatures(json);
+      let nameArray=[]
       for (let i = 0; i < features.length; i++) {
         const feature = features[i];
         const NAME = feature.values_['NAME']; //获取框选的公园名称
-        console.log(NAME);
+        nameArray.push(NAME)
+        // console.log(NAME);
+
+   
 
       }
-      // console.log(features.values_['NAME'])
-      // vectorSource.addFeatures(features);
-    
-      // this.map.getView().fit(vectorSource.getExtent());
+        console.log(nameArray);
+
+      //向后端传参框选得到的地质公园名称
+        axios.get('http://localhost:3000/api/user/PolygonSelect', {
+            params: {
+                parameter: nameArray
+            }
+        })
+        .then(function (response) {
+            console.log(response.data);
+            self.selectTableData=response.data
+        })
+        .catch(function (error) {
+          self.selectTableData=[]
+            console.log(error);
+        });
     });
   });
     },
@@ -461,6 +492,9 @@ export default {
         // console.log("移除了图层")
       }
   },
+  updateTableData(){
+    this.$bus.$emit('update-tabledata', this.selectTableData);
+  },
   /******************创建一个热力图层***************/ 
   HeatMap (checked) {
     if(checked){
@@ -534,6 +568,7 @@ showOverlayOnClick(parkInfo) {
       this.overlay = null;
     }
   },
+
 	}
 }
 </script>
