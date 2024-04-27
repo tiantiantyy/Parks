@@ -66,6 +66,9 @@ export default {
     this.$bus.$on('LoadHeatMap',(checked)=>{
       this.HeatMap(checked)
     })
+    this.$bus.$on('PolygonSelect',()=>{
+      this.PolygonSelect()
+    })
   },
   methods: {
     initMap(){
@@ -103,78 +106,7 @@ export default {
       // this.map.addLayer(this.mapLayerlabel)
       this.loadjson()
 
-    // 创建一个矢量图层用于显示绘制的几何图形
-    const vectorSource = new VectorSource();
-    const vectorLayer = new VectorLayer({
-      source: vectorSource,
-      style: new Style({
-        fill: new Fill({
-          color: 'rgba(255, 255, 255, 0.2)'
-        }),
-        stroke: new Stroke({
-          color: '#ffcc33',
-          width: 2
-        }),
-        image: new CircleStyle({
-          radius: 7,
-          fill: new Fill({
-            color: '#ffcc33'
-          })
-        })
-      })
-    });
-
-    // 添加绘制交互
-    const draw = new Draw({
-      source: vectorSource,
-      type: 'Polygon' // 框选类型，可以根据需求修改
-    });
-
-    // 将绘制图层和交互添加到地图中
-    this.map.addLayer(vectorLayer);
-    this.map.addInteraction(draw);
-
-  // 监听绘制结束事件
-  draw.on('drawend', event => {
-  // 将绘制的多边形转换投影坐标
-  const polygonGeometry = event.feature.getGeometry().transform('EPSG:3857', 'EPSG:4326');
-  //创建几何过滤器，注意几何名称必须写'the_geom'，否则报错
-  const polygonFilter = new Intersects('the_geom', polygonGeometry);
-  /// 创建 WFS GetFeature 请求对象
-  const featureRequest = new WFS().writeGetFeature({
-    srsName: 'EPSG:4326',
-    featureNS: 'http://geoserver/geoparks',
-    featurePrefix: 'GeoParks',
-    featureTypes: ['GeoParks:geoparks'],
-    outputFormat: 'application/json',
-    filter:polygonFilter // 使用几何过滤器作为查询条件
-  });
-
-  // 发送请求
-  fetch('http://localhost:8080/geoserver/' + 'wfs', {
-    method: 'POST',
-    body: new XMLSerializer().serializeToString(featureRequest),
-})
-  .then(function (response) {
-    console.log(response)
-    return response.json();
-  })
-  .then(function (json) {
-    const features = new GeoJSON().readFeatures(json);
-    for (let i = 0; i < features.length; i++) {
-      const feature = features[i];
-      const NAME = feature.values_['NAME']; //获取框选的公园名称
-      console.log(NAME);
-
-    }
-    // console.log(features.values_['NAME'])
-    // vectorSource.addFeatures(features);
    
-    // this.map.getView().fit(vectorSource.getExtent());
-  });
-});
-
-
 
     },
     /******************加载Geoserver图层***************/
@@ -326,8 +258,79 @@ export default {
 
 
 		},
+    PolygonSelect(){
+        console.log("PolygonSelect被调用了")
+       // 创建一个矢量图层用于显示绘制的几何图形
+        const vectorSource = new VectorSource();
+        const vectorLayer = new VectorLayer({
+          source: vectorSource,
+          style: new Style({
+            fill: new Fill({
+              color: 'rgba(255, 255, 255, 0.2)'
+            }),
+            stroke: new Stroke({
+              color: '#ffcc33',
+              width: 2
+            }),
+            image: new CircleStyle({
+              radius: 7,
+              fill: new Fill({
+                color: '#ffcc33'
+              })
+            })
+          })
+        });
+        // 添加绘制交互
+      const draw = new Draw({
+        source: vectorSource,
+        type: 'Polygon' // 框选类型，可以根据需求修改
+      });
 
-        /******************加载GeoJSON图层***************/
+      // 将绘制图层和交互添加到地图中
+      this.map.addLayer(vectorLayer);
+      this.map.addInteraction(draw);
+
+    // 监听绘制结束事件
+    draw.on('drawend', event => {
+    // 将绘制的多边形转换投影坐标
+    const polygonGeometry = event.feature.getGeometry().transform('EPSG:3857', 'EPSG:4326');
+    //创建几何过滤器，注意几何名称必须写'the_geom'，否则报错
+    const polygonFilter = new Intersects('the_geom', polygonGeometry);
+    /// 创建 WFS GetFeature 请求对象
+    const featureRequest = new WFS().writeGetFeature({
+      srsName: 'EPSG:4326',
+      featureNS: 'http://geoserver/geoparks',
+      featurePrefix: 'GeoParks',
+      featureTypes: ['GeoParks:geoparks'],
+      outputFormat: 'application/json',
+      filter:polygonFilter // 使用几何过滤器作为查询条件
+    });
+
+    // 发送请求
+    fetch('http://localhost:8080/geoserver/' + 'wfs', {
+      method: 'POST',
+      body: new XMLSerializer().serializeToString(featureRequest),
+  })
+    .then(function (response) {
+      console.log(response)
+      return response.json();
+    })
+    .then(function (json) {
+      const features = new GeoJSON().readFeatures(json);
+      for (let i = 0; i < features.length; i++) {
+        const feature = features[i];
+        const NAME = feature.values_['NAME']; //获取框选的公园名称
+        console.log(NAME);
+
+      }
+      // console.log(features.values_['NAME'])
+      // vectorSource.addFeatures(features);
+    
+      // this.map.getView().fit(vectorSource.getExtent());
+    });
+  });
+    },
+    /******************加载GeoJSON图层***************/
 //     loadjson:function(checked=true){
 //       if(checked){
 

@@ -6,15 +6,15 @@
 
     <panel :width="940" :height="560" position="absolute" :top="0" :left="490" >
 
-     <ol_Home @one-park-click="showOverlayOnClick" />
+     <ol_Home @one-park-click="showOverlayOnClick"/>
      <ParksInfo v-if="isInfoWindowVisible" :parkInfo="selectedPark" @close="closeInfoWindow"  />
     </panel>
     <panel :width="470" :height="460" position="absolute" :top="0" :left="1450" class="p20">
     
     </panel>
-
+    
     <panel :width="470" :height="480" position="absolute" :top="490" :left="0" >
-      
+      <button @click="PolygonSelectedPark">框选</button>
     </panel>
 
     <panel :width="940" :height="380" position="absolute" :top="590" :left="490">
@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import ParksInfo from '@/components/common/ParksInfo';
 import ParksTable from '@/components/common/ParksTable.vue';
 import echartsAreas from '@/components/common/chartStatistics/echartsAreas.vue';
 import echartsRank from '@/components/common/chartStatistics/echartsRank.vue';
@@ -57,7 +58,6 @@ import galleryBox from '@/components/common/galleryBox';
 import ganttChart from '@/components/common/ganttChart';
 import layerManager from '@/components/common/layerManager.vue';
 import ol_Home from '@/components/openlayers/ol_Home';
-import ParksInfo from '@/components/common/ParksInfo';
 
 
 export default {
@@ -91,9 +91,11 @@ export default {
     },
     closeInfoWindow(){
       console.log("关闭")
-
       this.isInfoWindowVisible = false;
-
+    },
+    PolygonSelectedPark(){
+      this.$bus.$emit('PolygonSelect');
+      console.log("发送PolygonSelect")
     }
   
   }
