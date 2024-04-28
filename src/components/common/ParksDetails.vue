@@ -1,16 +1,29 @@
 <template>
   <div class="container-all" v-show="ifShow" >
+
     <div class="title">
     <h1 >{{park['NAME']}}</h1>
-    <p class="slogan">11111111111</p>
+    <p class="slogan">{{park['SLOGAN']}}</p>
     </div>
    <div class="content">
     <img src="http://www.globalgeopark.org.cn/UploadFiles/2021_3_30/bsi202108173050847.jpg" alt="">
     <p class="introduce">{{park['DETAILS']}}</p>
   </div>
-  <div class="link">
+  <div class="info">
+    <span>高德评分</span>
+        <el-rate
+      v-model="park['SCORE']"
+      disabled
+      show-score
+      text-color="#ff9900"
+      score-template="{value}">
+    </el-rate>
+  </div>
+
+  <div class="link" v-show="park['URL']">
     <span>官方网站：<a :href="park['URL']" target="_blank">{{park['URL']}}</a></span>
   </div>
+ 
     
 
   <!-- <div v-for="(note, index) in notesData" :key="index"  class="container" @click="showcomments">
@@ -58,25 +71,29 @@ export default{
 </script>
 
 <style lang="less" scoped>
+
 .title{
   font-size: 20px;
   font-weight: 700;
-  padding:10px 20px 0px 20px;
+  padding:15px 25px;
   .slogan{
+  line-height: 20px;
   font-size: 16px;
   font-weight: 400;
   margin-top:10px ;
-  height: 30px;
-  color: rgb(208, 200, 200);
+  color: rgb(169, 163, 163);
 }
 }
 
 .content{
   .introduce{
-    padding:10px 0px;
+    margin: 10px 0px;
+    padding:15px 25px;
     font-size: 16px;
     line-height: 20px;
+    font-weight: 400;
     text-indent: 2em;
+    // border: 1px dotted;
   }
   img{
   width: 100%;
@@ -84,9 +101,13 @@ export default{
 }
 
 .link{
+  margin-top: 10px;
   font-size: 16px;
   line-height: 20px;
-}
 
+}
+.info{
+  display: flex;
+}
 }
 </style>

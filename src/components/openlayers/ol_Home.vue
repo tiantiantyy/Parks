@@ -148,7 +148,6 @@ export default {
         ];
         // 将容差范围转换为地图投影坐标系下的范围
         let mapExtent = transformExtent(extent, 'EPSG:3857', 'EPSG:4326');
-        let point = new Point(coor4326);
   
         /// 创建 WFS GetFeature 请求对象
         const featureRequest = new WFS().writeGetFeature({
@@ -160,7 +159,7 @@ export default {
           geometryName:'the_geom',
           bbox: mapExtent, // 添加转换后的范围作为 bbox 参数
         });
-        console.log(featureRequest);  //打印已选择的Feature
+        // console.log(featureRequest);  //打印已选择的Feature
 
         // 发送请求
         fetch('http://localhost:8080/geoserver/' + 'wfs', {
@@ -168,14 +167,14 @@ export default {
           body: new XMLSerializer().serializeToString(featureRequest),
       })
         .then(function (response) {
-          console.log(response)
+          // console.log(response)
           return response.json();
         })
         .then(function (json) {
           const feature = new GeoJSON().readFeatures(json);
           // console.log(feature)
           const NAME = feature[0].values_['NAME']; //获取框选的公园名称
-          console.log(NAME)
+          // console.log(NAME)
 
           //向后端传参框选得到的地质公园名称
             axios.get('http://localhost:3000/api/user/PointSelect', {

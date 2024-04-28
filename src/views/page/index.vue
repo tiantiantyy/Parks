@@ -1,9 +1,11 @@
 <template>
   <section class="container">
+    <!-- 第一个板块 图层管理 -->
     <panel :width="470" :height="460" position="absolute" :top="0" :left="0" class="p20">
       <layerManager/>
     </panel>
 
+    <!-- 第二个板块 主地图-->
     <panel :width="940" :height="560" position="absolute" :top="0" :left="490" >
       <div class="buttons">
       <button @click="StartPolygonSelect">框选</button>
@@ -12,10 +14,13 @@
      <ol_Home @one-park-click="showOverlayOnClick"/>
      <ParksInfo v-if="isInfoWindowVisible" :parkInfo="selectedPark" @close="closeInfoWindow"  />
     </panel>
+
+    <!-- 第三个板块 公园详情 -->
     <panel :width="470" :height="970" position="absolute" :top="0" :left="1450" class="p20">
       <ParksDetails/>
     </panel>
     
+    <!-- 第四个板块 统计图-->
     <panel :width="470" :height="480" position="absolute" :top="490" :left="0" >
       <el-tabs type="border-card" style="width: 100%; height: 100%;">
           <el-tab-pane class="card-display" label="面积排行" >
@@ -116,6 +121,11 @@ export default {
     transform: translateX(20px);
   }
 }
-
+.buttons{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+}
 </style>
 
