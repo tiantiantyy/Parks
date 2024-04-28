@@ -139,7 +139,7 @@ export default {
         let coor4326 = transform(coor, 'EPSG:3857', 'EPSG:4326'); // 将坐标从 EPSG:3857 转换成 EPSG:4326
 
         // 计算容差范围
-        let tolerance = 100000; // 容差值，单位为像素
+        let tolerance = 40000; // 容差值，单位为像素
         let extent = [
         coor[0] - tolerance,
         coor[1] - tolerance,
