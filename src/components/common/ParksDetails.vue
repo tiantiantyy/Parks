@@ -1,6 +1,25 @@
 <template>
-  <div class="container-all" v-show="ifShow" >
+  <div>
+    <div class="container-index" v-show="!ifShow" >
+    <div class="title">
+    <h1 >这里是公园详情页</h1>
+    <p class="slogan">这47个中国世界地质公园，你打卡了几处？</p>
+    </div>
+   <div class="content">
+    <img src="https://imagepphcloud.thepaper.cn/pph/image/77/502/524.jpg" alt="">
+    <img src="http://www.globalgeopark.org.cn/UploadFiles/2024_4_16/bsi202404163064589.JPG" alt="">
+    <img src="http://www.globalgeopark.org.cn/UploadFiles/2024_4_16/bsi202404166390038.jpg" alt="">
+    <p class="introduce">{{park['DETAILS']}}</p>
+  </div>
+  
 
+  <div class="link" v-show="park['URL']">
+    <span>官方网站：<a :href="park['URL']" target="_blank">{{park['URL']}}</a></span>
+  </div>
+
+  
+</div>
+  <div class="container-all" v-show="ifShow" >
     <div class="title">
     <h1 >{{park['NAME']}}</h1>
     <p class="slogan">{{park['SLOGAN']}}</p>
@@ -23,29 +42,9 @@
   <div class="link" v-show="park['URL']">
     <span>官方网站：<a :href="park['URL']" target="_blank">{{park['URL']}}</a></span>
   </div>
- 
-    
 
-  <!-- <div v-for="(note, index) in notesData" :key="index"  class="container" @click="showcomments">
-    <a class="link" :href="note['笔记链接']" target="_blank"><img src="../../assets/icon/link.svg"/></a>
-    <img class="coverimg" :src="note['封面']" alt="">
-    <div class="box-card" >
-      <div class="title">
-        <span>{{ note['笔记标题']}}</span>
-       
-      </div>
-      <div  class="text">
-        {{ truncateContent(note['笔记内容']) }}
-      </div>
-      <div class="info">
-        <span><img src="../../assets/icon/like.svg"/><i>{{note['点赞数']}}</i></span>
-        <span><img src="../../assets/icon/collect.svg"/><i>{{note['收藏数']}}</i></span>
-        <span><img src="../../assets/icon/comments.svg"/><i>{{note['评论数']}}</i></span>
-      </div>
-    </div> 
-  </div>-->
   
-  
+</div>
 </div>
   
 </template>
@@ -96,6 +95,7 @@ export default{
     // border: 1px dotted;
   }
   img{
+  margin-bottom:5px;
   width: 100%;
   height: 100%;
 }

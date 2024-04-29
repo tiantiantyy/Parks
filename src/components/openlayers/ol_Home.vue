@@ -23,6 +23,8 @@ import { transform } from 'ol/proj';
 import VectorSource from 'ol/source/Vector.js';
 import mapSources from './modules/maplist';
 
+
+
 //导入框选相关模块
 import axios from 'axios';
 import { GeoJSON, WFS } from 'ol/format.js';
@@ -33,8 +35,11 @@ import TileWMS from 'ol/source/TileWMS.js';
 import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
 
 //导入点选相关模块
-import Point from 'ol/geom/Point.js';
 import { transformExtent } from 'ol/proj';
+
+//导入实现时间轴相关模块
+import EqualTo from 'ol/format/filter/EqualTo.js';
+import Vector from 'ol/layer/Vector.js';
 export default {
 	components: {},
 	data() {
@@ -58,9 +63,10 @@ export default {
 			map: null,
 			mapLayer: null,
 			mapLayerlabel: null,
-      geojson: geoparks,
+      geojson:geoparks,
       overlay:null,//弹窗
       selectTableData:[],//点选中的park信息
+      refreshInterval: 5000,//渲染间隔时间
      
 		}
 	},
@@ -87,7 +93,9 @@ export default {
     this.$bus.$on('StopPolygonSelect',()=>{
       this.stopDrawing()
     })
-
+    this.$bus.$on('ApprovalYear',()=>{
+      this.ApprovalYear()
+    })
   },
   beforeDestroy() {
         // 组件销毁前移除事件监听器
@@ -119,7 +127,7 @@ export default {
       //初始化标签图层
       this.mapLayerlabel = new TileLayer({
         source: this.tdtlabelwx,
-        // projection: this.proj
+        projection: this.proj
       })
      
    
@@ -136,7 +144,7 @@ export default {
       this.map.on('click',event=>{
       
         let coor=event.coordinate;
-        let coor4326 = transform(coor, 'EPSG:3857', 'EPSG:4326'); // 将坐标从 EPSG:3857 转换成 EPSG:4326
+        // let coor4326 = transform(coor, 'EPSG:3857', 'EPSG:4326'); // 将坐标从 EPSG:3857 转换成 EPSG:4326
 
         // 计算容差范围
         let tolerance = 40000; // 容差值，单位为像素
@@ -452,121 +460,6 @@ export default {
   });
 },
 
-    /******************加载GeoJSON图层***************/
-//     loadjson:function(checked=true){
-//       if(checked){
-
-//       //初始化json图层
-//       let features = (new GeoJSON()).readFeatures(this.geojson);
-//           for (let i = 0; i < features.length; i++) {
-//             let _geom = features[i].getGeometry();
-//             _geom.transform("EPSG:4326", "EPSG:3857");
-//           }
-//           let vectorSource = new Vector({
-//             features: features
-//           });
-//           let vector = new VectorLayer({
-//             source: vectorSource,
-//             style: this.styleFunction,
-//             renderMode: "vector",
-//             zIndex: 9999 // 让图层始终添加到底图之上
-//           });
-//           this.addLayer(vector,'POI')
-        
-//         }
-          
-//           else{
-//             this.removeLayerByName('POI')
-//           }
-//              // 添加地图点击事件监听器
-//       // this.map.on('click', this.showOverlayOnClick);
-      
-//       this.map.on('click', (evt) => {
-//     if (this.map.hasFeatureAtPixel(evt.pixel)) {
-//         this.map.getTargetElement().style.cursor = "pointer";
-//         this.map.forEachFeatureAtPixel(evt.pixel, (feature) => {
-//             // console.log(feature);
-//             let name = feature.get("name");
-//             let province =feature.get("province")
-//             console.log(name);
-//             let parkInfo = {
-//                 name,
-//                 province
-//             };
-//             // this.showOverlayOnClick(name,province, evt);
-//             this.showOverlayOnClick(parkInfo);
-//         });
-//     } else {
-//         this.map.getTargetElement().style.cursor = "default";
-//         // 首先销毁之前的 overlay
-//     if (this.overlay) {
-//     console.log("消除overlay")
-
-//         this.map.removeOverlay(this.overlay);
-//         this.overlay = null;
-//     }
-//     }
-// });
-
-    
-//     },
-
-    /******************改变JSON样式***************/ 
-    // styleFunction(feature) {
-    //   let stroke = new Stroke({
-    //     color: 'black',
-    //     width: 2
-    //   });
-    //   let fill = new Fill({
-    //     color: 'red'
-    //   });
-    //   let _name = feature.get("name");
-    //   // _name = this.map.getView().getZoom() > 5 ? _name : "";
-    //   _name = _name;
-    //   let _radius = 8,
-    //     _radius2 = 8;
-    //   if (_name === "北京") {
-    //     _radius = 12;
-    //     _radius2 = 6;
-    //   }
-    //   let styles = [];
-    //   styles.push(new Style({
-    //     stroke: stroke,
-    //     fill: fill,
-    //     image: new RegularShape({
-    //       fill: fill,
-    //       stroke: stroke,
-    //       points: 5,
-    //       radius: _radius,
-    //       radius2: _radius2,
-    //       angle: 0
-    //     }),
-    //     text: new Text({
-    //       text: _name,
-    //       textAlign: "left",
-    //       offsetX: 12,
-    //       font: "bold 11px sans-serif",
-    //       fill: new Fill({
-    //         color: 'red'
-    //       }),
-    //       stroke: new Stroke({
-    //         color: 'white',
-    //         width: 2
-    //       })
-    //     })
-    //   }));
-    //   styles.push(new Style({
-    //     geometry: feature.getGeometry(),
-    //     image: new Circle({
-    //       radius: 4,
-    //       fill: new Fill({
-    //         color: "white"
-    //       })
-    //     })
-    //   }));
-
-    //   return styles;
-    // },
     /******************添加图层并存储到 layers 对象中***************/ 
     addLayer(layer, name) {
       this.map.addLayer(layer);
@@ -583,32 +476,109 @@ export default {
         // console.log("移除了图层")
       }
   },
-  updateTableData(){
-    this.$bus.$emit('update-tabledata', this.selectTableData);
-  },
+    updateTableData(){
+      this.$bus.$emit('update-tabledata', this.selectTableData);
+    },
   /******************创建一个热力图层***************/ 
-  HeatMap (checked) {
-    if(checked){
-     let vector = new HeatmapLayer({
-      zIndex: 9999, // 让图层始终添加到底图之上
-     // 矢量数据源
-       source: new VectorSource({
-         features: (new GeoJSON()).readFeatures(this.geojson, {
-         dataProjection: 'EPSG:4326',
-         featureProjection: 'EPSG:3857',
+    HeatMap (checked) {
+      if(checked){
+      let vector = new HeatmapLayer({
+        zIndex: 9999, // 让图层始终添加到底图之上
+      // 矢量数据源
+        source: new VectorSource({
+          features: (new GeoJSON()).readFeatures(this.geojson, {
+          dataProjection: 'EPSG:4326',
+          featureProjection: 'EPSG:3857',
 
-     }),
-       }),
-       blur: 20, // 模糊尺寸
-       radius: 20 // 热点半径
-     })
+      }),
+        }),
+        blur: 20, // 模糊尺寸
+        radius: 20 // 热点半径
+      })
 
-      //将图层加载到地图对象
-      this.addLayer(vector,'HeatMap')}
-      else{
-        this.removeLayerByName('HeatMap')
+        //将图层加载到地图对象
+        this.addLayer(vector,'HeatMap')}
+        else{
+          this.removeLayerByName('HeatMap')
 
+        }
+    },
+  /******************创建一个笔记分级符号图层***************/
+
+   ApprovalYear(){
+    let self=this
+
+    // console.log('ApprovalYear被调用了',self)
+    //创建属性查询过滤器
+      const Filter = new EqualTo('YEAR','2004');
+    /// 创建 WFS GetFeature 请求对象
+    const featureRequest = new WFS().writeGetFeature({
+          srsName: 'EPSG:4326',
+          featureNS: 'http://geoserver/geoparks',
+          featurePrefix: 'GeoParks',
+          featureTypes: ['GeoParks:geoparks'],
+          outputFormat: 'application/json',
+          geometryName:'the_geom',
+          filter:Filter
+        });
+        // console.log(featureRequest);  //打印已选择的Feature
+
+        // 发送请求
+        fetch('http://localhost:8080/geoserver/' + 'wfs', {
+          method: 'POST',
+          body: new XMLSerializer().serializeToString(featureRequest),
+      })
+        .then(function (response) {
+          // console.log(response)
+          return response.json();
+        })
+        .then(function (json) {
+          // self.geojson=json
+          // console.log(self.geojson)
+          const features = new GeoJSON().readFeatures(json,{ featureProjection: 'EPSG:4326' });
+          let vectorSource = new Vector({
+        features: features
+      });
+          let vector = new VectorLayer({
+             zIndex: 9999, // 让图层始终添加到底图之上
+            // 矢量数据源
+            source: vectorSource,
+            projection: 'EPSG:4326',
+      })
+
+
+
+          // console.log(json)
+    // 转换 JSON 数据为 OpenLayers 的要素
+    // const features = new GeoJSON().readFeatures(json);
+    //       console.log(features)
+
+    //  // 创建矢量图层并添加到地图上
+    //  const vectorSource = new VectorSource({
+    //         features: features
+    //       });
+    //       const vectorLayer = new VectorLayer({
+    //         source: vectorSource,
+    //         style: new Style({
+    //           image: new CircleStyle({
+    //             radius: 6,
+    //             fill: new Fill({color: 'red'}),
+    //             stroke: new Stroke({color: 'white', width: 2})
+    //           })
+    //         })
+    //       });
+    //       self.addLayer(vectorLayer)
+    // 遍历要素并输出名称到控制台
+    let nameArray = [];
+    for (let i = 0; i < features.length; i++) {
+      const feature = features[i];
+      const NAME = feature.get('NAME'); //获取点要素的名称
+      nameArray.push(NAME);
+      console.log(NAME);
       }
+    })
+     
+
    },
   /******************创建一个笔记分级符号图层***************/
   NotesMap(checked){

@@ -10,6 +10,7 @@
       <div class="buttons">
       <button @click="StartPolygonSelect">框选</button>
       <button @click="StopPolygonSelect">箭头</button>
+      <button @click="ApprovalYear">时间</button>
     </div>
      <ol_Home @one-park-click="showOverlayOnClick"/>
      <ParksInfo v-if="isInfoWindowVisible" :parkInfo="selectedPark" @close="closeInfoWindow"  />
@@ -105,8 +106,11 @@ export default {
     },
     StopPolygonSelect(){
       this.$bus.$emit('StopPolygonSelect');
+    },
+    ApprovalYear(){
+      this.$bus.$emit('ApprovalYear');
+
     }
-  
   }
 }
 </script>
