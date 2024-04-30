@@ -2,7 +2,7 @@
   <section class="container">
     <!-- 第一个板块 排行榜 -->
     <panel :width="470" :height="970" position="absolute" :top="0" :left="0" class="scroll">
-      <el-tabs type="border-card" style="width: 100%; height: 100%;">
+      <el-tabs type="border-card" style="width: 100%;">
         <el-tab-pane class="card-display" label="热门推荐" >
             <h1 class="etitle">热门推荐</h1> 
           </el-tab-pane>
@@ -93,8 +93,8 @@
 <script>
 import ParksDetails from '@/components/common/ParksDetails';
 import ParksInfo from '@/components/common/ParksInfo';
-import RankArea from '@/components/common/RankArea';
 import ParksTable from '@/components/common/ParksTable.vue';
+import RankArea from '@/components/common/RankArea';
 import echartsAreas from '@/components/common/chartStatistics/echartsAreas.vue';
 import echartsRank from '@/components/common/chartStatistics/echartsRank.vue';
 import statisticsByBar from '@/components/common/chartStatistics/statisticsByBar';

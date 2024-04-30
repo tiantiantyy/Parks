@@ -67,7 +67,7 @@ export default {
       overlay:null,//弹窗
       selectTableData:[],//点选中的park信息
       refreshInterval: 5000,//渲染间隔时间
-     
+      PointSelectPark:null
 		}
 	},
   watch: {
@@ -95,6 +95,9 @@ export default {
     })
     this.$bus.$on('ApprovalYear',()=>{
       this.ApprovalYear()
+    })
+    this.$bus.$on('QueryPark',(NAME)=>{
+      this.QueryPark(NAME)
     })
   },
   beforeDestroy() {
@@ -180,18 +183,27 @@ export default {
         })
         .then(function (json) {
           const feature = new GeoJSON().readFeatures(json);
-          // console.log(feature)
+          console.log(feature)
           const NAME = feature[0].values_['NAME']; //获取框选的公园名称
-          // console.log(NAME)
+          console.log(NAME)
+          self.QueryPark(NAME)
+        })
+    }
+  );
 
+    },
+    /******************根据公园名称向查询后端公园信息***************/
+    QueryPark(NAME){
+      console.log("ol_Home接收",NAME)
+      let self=this
           //向后端传参框选得到的地质公园名称
-            axios.get('http://localhost:3000/api/user/PointSelect', {
+          axios.get('http://localhost:3000/api/user/PointSelect', {
                 params: {
                     parameter: NAME
                 }
             })
             .then(function (response) {
-                // console.log(response.data)
+                console.log(response.data)
                 self.PointSelectPark=response.data[0];
                 let parkInfo=self.PointSelectPark;
                 self.delayParkInfo(parkInfo);
@@ -200,14 +212,10 @@ export default {
 
             })
             .catch(function (error) {
-              self.PointSelectPark=[]
+              self.PointSelectPark=[];
 
                 console.log(error);
             });
-        })
-    }
-  );
-
     },
     /******************加载Geoserver图层***************/
     loadjson:function(checked=true){

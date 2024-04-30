@@ -1,21 +1,21 @@
 <template>
   <div class="container-all" >
-    <ul>
+    <ul v-for="(area, index) in areaData" :key="index" >
       <li>
         <div class="content-all">
           <div class="image">
-            <div class="top"><span>1</span></div>
-            <img src="https://imagepphcloud.thepaper.cn/pph/image/77/502/524.jpg" alt="">
+            <div class="icon" :style="getbgc(index)"><span>{{index+1}}</span></div>
+            <img :src="area['IMAGE']" alt="">
           </div>
           <div class="content">
-            <h1>地质公园</h1>
-            <p>省份</p>
-            <p><span>查看更多</span></p>
+            <h1>{{area['NAME']}}</h1>
+            <p>{{area['PROVINCE']  }}</p>
+            <p><button @click="QueryPark(area['NAME'])">查看更多</button></p>
           </div>
           
           <div class="number">
-            <span>面积</span>
-            <i>44432</i>
+            <span>约</span>
+            <i>{{area['AREA']}}</i>
             <span>km2</span>
             
           </div>
@@ -30,12 +30,38 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default{
   data(){
     return{
-     
+      areaData:[],
 }
   },
+  mounted(){
+    this.queryInfo()
+  },
+  methods:{
+     //用于后端数据库的查询
+     queryInfo () {
+             axios.get('http://localhost:3000/api/user/queryRank').then((response) => {
+            this.areaData=response.data
+          
+         })
+      },
+      getbgc(index){
+        if (index+1 === 1) {
+        return { backgroundColor: '#fe2d46' };
+      } else if (index+1 === 2) {
+        return { backgroundColor: '#f60' };
+      } else  {
+        return { backgroundColor: '#faa90e' };
+      }
+      },
+      QueryPark(NAME){
+        console.log("RA发送信号",NAME)
+        this.$bus.$emit('QueryPark', NAME);
+      }
+  }
 }
 </script>
 
@@ -49,10 +75,13 @@ export default{
   display: flex;
   width:100%;
   height: 100%;
+  
   .image{
+    padding: 10px;
     position: relative;
-    width:40%;
-    height: 40%;
+    width:30%;
+    // height: 30%;
+    justify-content: center;
     img{
     width:100%;
     height: 100%;
@@ -62,10 +91,9 @@ export default{
     color:#fff;
   }
   
-    .top{
+    .icon{
     width: 20px;
     height: 20px;
-    background-color: #fe2d46;
     line-height: 20px;
       text-align: center;
       position: absolute;
@@ -76,7 +104,7 @@ export default{
   }
   .content{
     padding: 10px;
-    flex:1;
+    flex:2;
     h1{
       margin-bottom: 10px;
     }
@@ -87,11 +115,13 @@ export default{
     }
   }
   .number{
+    flex:1;
     padding: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     i{
+
       line-height: 30px;
       color: green;
       font-size: 22px;

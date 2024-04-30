@@ -25,7 +25,7 @@
     <p class="slogan">{{park['SLOGAN']}}</p>
     </div>
    <div class="content">
-    <img src="http://www.globalgeopark.org.cn/UploadFiles/2021_3_30/bsi202108173050847.jpg" alt="">
+    <img :src="park['IMAGE']" alt="">
     <p class="introduce">{{park['DETAILS']}}</p>
   </div>
   <div class="info">
