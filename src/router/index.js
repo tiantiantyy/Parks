@@ -33,22 +33,7 @@ const routes = [
           title: '智慧公园'
         }
       },
-      // {
-      //   path: 'index4',
-      //   name: 'index4',
-      //   component: resolve => require(['@/views/page4/index'], resolve),
-      //   meta: {
-      //     title: '智慧数据大屏 大屏展示_4'
-      //   }
-      // },
-      // {
-      //   path: 'index5',
-      //   name: 'index5',
-      //   component: resolve => require(['@/views/page5/index'], resolve),
-      //   meta: {
-      //     title: '智慧数据大屏 大屏展示_5'
-      //   }
-      // }
+      
     ]
   }
 ]

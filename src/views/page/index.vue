@@ -1,8 +1,31 @@
 <template>
   <section class="container">
-    <!-- 第一个板块 图层管理 -->
-    <panel :width="470" :height="460" position="absolute" :top="0" :left="0" class="p20">
-   
+    <!-- 第一个板块 排行榜 -->
+    <panel :width="470" :height="970" position="absolute" :top="0" :left="0" class="scroll">
+      <el-tabs type="border-card" style="width: 100%; height: 100%;">
+        <el-tab-pane class="card-display" label="热门推荐" >
+            <h1 class="etitle">热门推荐</h1> 
+          </el-tab-pane>
+          <el-tab-pane class="card-display" label="面积排行" >
+            <!-- <h1 class="etitle">地质公园面积排行</h1>  -->
+            <!-- <echartsAreas/> -->
+            <RankArea/>
+          </el-tab-pane>
+          <el-tab-pane class="card-display" label="高德评分榜单">
+          <h1 class="etitle">高德评分</h1> 
+          <echartsRank/>
+        </el-tab-pane>
+          <el-tab-pane class="card-display" label="热度排行">
+            <h1 class="etitle">地质公园热度排行</h1> 
+            <echartsRank/>
+          </el-tab-pane>
+         
+          <el-tab-pane class="card-display" label="小红书攻略数">
+            <h1 class="etitle">小红书攻略数</h1> 
+            <echartsAreas/>
+          </el-tab-pane>
+  </el-tabs>
+  
     </panel>
 
     <!-- 第二个板块 主地图-->
@@ -57,27 +80,8 @@
     </panel>
     
     <!-- 第四个板块 统计图-->
-    <panel :width="470" :height="480" position="absolute" :top="490" :left="0" >
-      <el-tabs type="border-card" style="width: 100%; height: 100%;">
-          <el-tab-pane class="card-display" label="面积排行" >
-            <h1 class="etitle">地质公园面积排行</h1> 
-            <echartsAreas/>
-          </el-tab-pane>
-          <el-tab-pane class="card-display" label="高德评分榜单">
-          <h1 class="etitle">高德评分</h1> 
-          <echartsRank/>
-        </el-tab-pane>
-          <el-tab-pane class="card-display" label="热度排行">
-            <h1 class="etitle">地质公园热度排行</h1> 
-            <echartsRank/>
-          </el-tab-pane>
-         
-          <el-tab-pane class="card-display" label="小红书攻略数">
-            <h1 class="etitle">小红书攻略数</h1> 
-            <echartsAreas/>
-          </el-tab-pane>
-  </el-tabs>
-    </panel>
+    <!-- <panel :width="470" :height="480" position="absolute" :top="490" :left="0" >
+    </panel> -->
 
     <panel :width="940" :height="380" position="absolute" :top="590" :left="490">
       <!-- <p class="panel-title">echart图表</p> -->
@@ -89,6 +93,7 @@
 <script>
 import ParksDetails from '@/components/common/ParksDetails';
 import ParksInfo from '@/components/common/ParksInfo';
+import RankArea from '@/components/common/RankArea';
 import ParksTable from '@/components/common/ParksTable.vue';
 import echartsAreas from '@/components/common/chartStatistics/echartsAreas.vue';
 import echartsRank from '@/components/common/chartStatistics/echartsRank.vue';
@@ -114,7 +119,8 @@ export default {
     layerManager,
     ParksTable,
     ParksInfo,
-    ParksDetails
+    ParksDetails,
+    RankArea
  
   },
   data() {
@@ -152,6 +158,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.scroll{
+  overflow: scroll!important;;
+}
   .mapNav{
     position: absolute;
     z-index: 10;
