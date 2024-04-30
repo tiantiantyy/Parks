@@ -1,7 +1,5 @@
 <template>
   <el-checkbox-group v-model="checkList" id="mouse-position">
-    <p class="title" style="font-size: 20px;">图层选择器</p>
-
     <el-checkbox label="公园POI点" checked v-model="isPOIChecked" @change="poi"></el-checkbox>
     <el-checkbox label="热力图" @change="heatmap"></el-checkbox>
     <el-checkbox label="攻略数" @change="yinghuo"></el-checkbox>
@@ -59,9 +57,11 @@ export default {
 .el-checkbox{
   display: block;
   padding: 10px;
-  font-size: 22px;
-}
 
+}
+#mouse-position{
+  font-size: 8px;
+}
 
 </style>
 

@@ -2,18 +2,53 @@
   <section class="container">
     <!-- 第一个板块 图层管理 -->
     <panel :width="470" :height="460" position="absolute" :top="0" :left="0" class="p20">
-      <layerManager/>
+   
     </panel>
 
     <!-- 第二个板块 主地图-->
     <panel :width="940" :height="560" position="absolute" :top="0" :left="490" >
-      <div class="buttons">
-      <button @click="StartPolygonSelect">框选</button>
-      <button @click="StopPolygonSelect">箭头</button>
-      <button @click="ApprovalYear">时间</button>
-    </div>
+     
+    <div class="mapNav">
+      <el-menu default-active="1-4-1" class="el-menu-vertical-demo" :collapse="isCollapse">
+        <el-submenu index="1">
+          <template slot="title">
+            <i class="el-icon-menu"></i>
+            <span slot="title">图层管理</span>
+          </template>
+          <el-menu-item-group>
+            <span slot="title">添加图层</span>
+            <layerManager />
+          </el-menu-item-group>
+        </el-submenu>
+
+        <el-submenu  index="2">
+          <template slot="title">
+            <i class="el-icon-thumb"></i>
+            <span slot="title">地图交互</span>
+          </template>
+          <el-menu-item-group>
+            <span slot="title">地图交互</span>
+            <el-row>
+              <el-button type="primary" size="mini" round @click="StartPolygonSelect">框选</el-button>
+              <el-button type="primary" size="mini" round @click="StopPolygonSelect">箭头</el-button>
+              <el-button type="primary" size="mini" round @click="ApprovalYear">时间</el-button>
+            </el-row>
+            
+     
+          </el-menu-item-group>
+        </el-submenu >
+        <el-menu-item index="3" disabled>
+          <i class="el-icon-document"></i>
+          <span slot="title">导航三</span>
+        </el-menu-item>
+        <el-menu-item index="4">
+          <i class="el-icon-setting"></i>
+          <span slot="title">导航四</span>
+        </el-menu-item>
+      </el-menu>
+      </div>
      <ol_Home @one-park-click="showOverlayOnClick"/>
-     <ParksInfo v-if="isInfoWindowVisible" :parkInfo="selectedPark" @close="closeInfoWindow"  />
+     <!-- <ParksInfo v-if="isInfoWindowVisible" :parkInfo="selectedPark" @close="closeInfoWindow"  /> -->
     </panel>
 
     <!-- 第三个板块 公园详情 -->
@@ -85,7 +120,8 @@ export default {
   data() {
     return {
       isInfoWindowVisible: false, // 控制信息窗口的显示状态
-      selectedPark: null // 存储当前选中的地质公园信息
+      selectedPark: null, // 存储当前选中的地质公园信息
+      isCollapse: true //地图旁控件导航按钮
     }
   },
   methods:{
@@ -116,6 +152,18 @@ export default {
 </script>
 
 <style lang="less" scoped>
+  .mapNav{
+    position: absolute;
+    z-index: 10;
+    top:50%;
+    transform: translateY(-50%);
+
+    .el-menu-vertical-demo:not(.el-menu--collapse) {
+    width: 200px;
+    min-height: 400px;
+  }
+  }
+
 .card-display{
   font-size: 22px;
   font-weight: 700;
@@ -125,11 +173,6 @@ export default {
     transform: translateX(20px);
   }
 }
-.buttons{
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  z-index: 2;
-}
+
 </style>
 
