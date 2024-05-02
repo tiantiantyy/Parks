@@ -9,6 +9,7 @@
     </panel>
     <panel :width="470" :height="970" position="absolute" :top="0" :left="1450" class="comments p20">
       <Comments/>
+      
     </panel>
 
     <panel :width="940" :height="380" position="absolute" :top="590" :left="490" class="p20">

@@ -42,3 +42,12 @@ export default{
 
 }
 </script>
+
+<style>
+.blueLayer{
+    /* filter:grayscale(500%) invert(10%); */
+    filter:grayscale(500%) sepia(11%) invert(10%);
+
+    /* filter:grayscale(100%) sepia(51%) invert(100%) saturate(350%) ; */
+}
+</style>

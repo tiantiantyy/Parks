@@ -99,6 +99,9 @@ export default {
     this.$bus.$on('QueryPark',(NAME)=>{
       this.QueryPark(NAME)
     })
+    this.$bus.$on('resetMapCenter',()=>{
+      this.resetMapCenter()
+    })
   },
   beforeDestroy() {
         // 组件销毁前移除事件监听器
@@ -107,6 +110,8 @@ export default {
         this.$bus.$off('LoadNotesMap');
         this.$bus.$off('StartPolygonSelect');
         this.$bus.$off('StopPolygonSelect');
+        this.$bus.$off('ApprovalYear');
+        this.$bus.$off('QueryPark');
     },
   methods: {
     initMap(){
@@ -120,12 +125,13 @@ export default {
                 this.proj,
                 this.proj_m
               ),
-          zoom: 5
+          zoom: 4
         })
       })
       //初始化地图图层
       this.mapLayer = new TileLayer({
         source: this.tdtdz,
+        className:'blueLayer',//增加className属性
       })
       //初始化标签图层
       this.mapLayerlabel = new TileLayer({
@@ -135,12 +141,22 @@ export default {
      
    
       //将图层加载到地图对象
-      this.mapLayer = new TileLayer({
-            source: this.geoqcs,
-            projection: this.proj
-          })
+      // this.mapLayer = new TileLayer({
+      //       source: this.geoqcs,
+      //       projection: this.proj
+      //     })
       this.map.addLayer(this.mapLayer)
+
+
+  //     //添加底图滤镜
+  //     this.map.on('precompose', function(evt){
+  //     let ctx = evt.context;
+  //     ctx.filter = filter;//设置滤镜值
+  // })
+  //     this.map.render();
+
       
+
       // this.map.addLayer(this.mapLayerlabel)
       this.loadjson()
       const self = this;
@@ -183,9 +199,8 @@ export default {
         })
         .then(function (json) {
           const feature = new GeoJSON().readFeatures(json);
-          console.log(feature)
-          const NAME = feature[0].values_['NAME']; //获取框选的公园名称
-          console.log(NAME)
+          // console.log(feature)
+          const NAME = feature[0].values_['NAME']; //获取点选的公园名称
           self.QueryPark(NAME)
         })
     }
@@ -207,13 +222,14 @@ export default {
                 self.PointSelectPark=response.data[0];
                 let parkInfo=self.PointSelectPark;
                 self.delayParkInfo(parkInfo);
-                // console.log(self.PointSelectPark);
+                let LON=self.PointSelectPark["LONGITUDE"];
+                let LAT=self.PointSelectPark["LATITUDE"];
+                self.setMapCenter(LON,LAT)
                 // console.log(self.PointSelectPark['DETAILS']);
 
             })
             .catch(function (error) {
               self.PointSelectPark=[];
-
                 console.log(error);
             });
     },
@@ -515,7 +531,6 @@ export default {
 
    ApprovalYear(){
     let self=this
-
     // console.log('ApprovalYear被调用了',self)
     //创建属性查询过滤器
       const Filter = new EqualTo('YEAR','2004');
@@ -588,6 +603,25 @@ export default {
      
 
    },
+
+     /******************方法用于设置地图视图的中心点***************/
+  setMapCenter(longitude, latitude) {
+    // 将经纬度转换为地图坐标系的中心点
+    let zoom=7;
+    const center = transform([longitude, latitude], this.proj, this.proj_m,);
+    this.map.getView().setZoom(zoom);
+    // 更新地图视图的中心点
+    this.map.getView().setCenter(center);
+  },
+     /******************方法用于设置地图视图的中心点***************/
+  resetMapCenter() {
+    // 将经纬度转换为地图坐标系的中心点
+    let zoom=4;
+    const center = transform([101.46912, 36.24274], this.proj, this.proj_m,);
+    this.map.getView().setZoom(zoom);
+    // 更新地图视图的中心点
+    this.map.getView().setCenter(center);
+  },
   /******************创建一个笔记分级符号图层***************/
   NotesMap(checked){
     if(checked){
@@ -649,12 +683,7 @@ export default {
 //   this.overlay.setPosition(coordinates);
 // },
 
-//测试公园POI点位窗口
-showOverlayOnClick(parkInfo) {
-    // 当点击地质公园点位时，触发该事件，并将地质公园信息传递给父组件
-    console.log("this.$emit('one-park-click', parkInfo);")
-    this.$emit('one-park-click', parkInfo);
-},
+
   // 隐藏 overlay
   hideOverlay() {
     if (this.overlay) {

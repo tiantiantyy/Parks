@@ -55,6 +55,7 @@ export default {
   margin-bottom: 10px;
 }
 .el-checkbox{
+
   display: block;
   padding: 10px;
 

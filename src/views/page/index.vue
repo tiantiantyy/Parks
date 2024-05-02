@@ -7,8 +7,6 @@
             <h1 class="etitle">热门推荐</h1> 
           </el-tab-pane>
           <el-tab-pane class="card-display" label="面积排行" >
-            <!-- <h1 class="etitle">地质公园面积排行</h1>  -->
-            <!-- <echartsAreas/> -->
             <RankArea/>
           </el-tab-pane>
           <el-tab-pane class="card-display" label="高德评分榜单">
@@ -30,15 +28,14 @@
 
     <!-- 第二个板块 主地图-->
     <panel :width="940" :height="560" position="absolute" :top="0" :left="490" >
-     
     <div class="mapNav">
-      <el-menu default-active="1-4-1" class="el-menu-vertical-demo" :collapse="isCollapse">
-        <el-submenu index="1">
+      <el-menu default-active="1-4-1" class="el-menu-vertical-demo" :collapse="isCollapse" >
+        <el-submenu index="1" >
           <template slot="title">
             <i class="el-icon-menu"></i>
             <span slot="title">图层管理</span>
           </template>
-          <el-menu-item-group>
+          <el-menu-item-group >
             <span slot="title">添加图层</span>
             <layerManager />
           </el-menu-item-group>
@@ -55,6 +52,7 @@
               <el-button type="primary" size="mini" round @click="StartPolygonSelect">框选</el-button>
               <el-button type="primary" size="mini" round @click="StopPolygonSelect">箭头</el-button>
               <el-button type="primary" size="mini" round @click="ApprovalYear">时间</el-button>
+              <el-button type="primary" size="mini" round @click="resetMapCenter">还原地图</el-button>
             </el-row>
             
      
@@ -70,8 +68,8 @@
         </el-menu-item>
       </el-menu>
       </div>
-     <ol_Home @one-park-click="showOverlayOnClick"/>
-     <!-- <ParksInfo v-if="isInfoWindowVisible" :parkInfo="selectedPark" @close="closeInfoWindow"  /> -->
+     <ol_Home/>
+
     </panel>
 
     <!-- 第三个板块 公园详情 -->
@@ -125,23 +123,12 @@ export default {
   },
   data() {
     return {
-      isInfoWindowVisible: false, // 控制信息窗口的显示状态
       selectedPark: null, // 存储当前选中的地质公园信息
       isCollapse: true //地图旁控件导航按钮
     }
   },
   methods:{
-    // 地图上地质公园点位的点击事件处理函数
-    showOverlayOnClick(parkInfo) {
-      // 设置当前选中的地质公园信息，并显示信息窗口
-    
-      this.selectedPark = parkInfo;
-      this.isInfoWindowVisible = true;
-    },
-    closeInfoWindow(){
-      console.log("关闭")
-      this.isInfoWindowVisible = false;
-    },
+ 
     StartPolygonSelect(){
 
       this.$bus.$emit('ifStartPolygonSelect');
@@ -151,28 +138,32 @@ export default {
     },
     ApprovalYear(){
       this.$bus.$emit('ApprovalYear');
-
+    },
+    resetMapCenter(){
+      this.$bus.$emit('resetMapCenter');
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
+
 .scroll{
-  overflow: scroll!important;;
+  overflow: scroll!important;
 }
-  .mapNav{
+.mapNav{
     position: absolute;
     z-index: 10;
     top:50%;
     transform: translateY(-50%);
-
-    .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 200px;
-    min-height: 400px;
-  }
+   
   }
 
+  .el-menu-vertical-demo:not(.el-menu--collapse) {
+      font-size: 10px;
+    width: 100px;
+    min-height: 200px;
+  }
 .card-display{
   font-size: 22px;
   font-weight: 700;
@@ -182,6 +173,7 @@ export default {
     transform: translateX(20px);
   }
 }
+
 
 </style>
 
