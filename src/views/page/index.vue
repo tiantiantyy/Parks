@@ -6,19 +6,18 @@
         <el-tab-pane class="card-display" label="热门推荐" >
             <h1 class="etitle">热门推荐</h1> 
           </el-tab-pane>
-          <el-tab-pane class="card-display" label="面积排行" >
+          <el-tab-pane class="card-display" label="面积榜单" >
             <RankArea/>
           </el-tab-pane>
-          <el-tab-pane class="card-display" label="高德评分榜单">
-          <h1 class="etitle">高德评分</h1> 
-          <echartsRank/>
+          <el-tab-pane class="card-display" label="评分榜单">
+          <RankScore/>
         </el-tab-pane>
-          <el-tab-pane class="card-display" label="热度排行">
+          <el-tab-pane class="card-display" label="热度榜单">
             <h1 class="etitle">地质公园热度排行</h1> 
             <echartsRank/>
           </el-tab-pane>
          
-          <el-tab-pane class="card-display" label="小红书攻略数">
+          <el-tab-pane class="card-display" label="攻略榜单">
             <h1 class="etitle">小红书攻略数</h1> 
             <echartsAreas/>
           </el-tab-pane>
@@ -93,6 +92,7 @@ import ParksDetails from '@/components/common/ParksDetails';
 import ParksInfo from '@/components/common/ParksInfo';
 import ParksTable from '@/components/common/ParksTable.vue';
 import RankArea from '@/components/common/RankArea';
+import RankScore from '@/components/common/RankScore';
 import echartsAreas from '@/components/common/chartStatistics/echartsAreas.vue';
 import echartsRank from '@/components/common/chartStatistics/echartsRank.vue';
 import statisticsByBar from '@/components/common/chartStatistics/statisticsByBar';
@@ -118,7 +118,8 @@ export default {
     ParksTable,
     ParksInfo,
     ParksDetails,
-    RankArea
+    RankArea,
+    RankScore
  
   },
   data() {

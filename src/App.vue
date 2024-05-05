@@ -46,7 +46,8 @@ export default{
 <style>
 .blueLayer{
     /* filter:grayscale(500%) invert(10%); */
-    filter:grayscale(500%) sepia(11%) invert(10%);
+    filter:grayscale(220%) sepia(2%) invert(5%) ;
+    /* filter:grayscale(500%) sepia(11%) invert(5%) saturate(10%); */
 
     /* filter:grayscale(100%) sepia(51%) invert(100%) saturate(350%) ; */
 }
