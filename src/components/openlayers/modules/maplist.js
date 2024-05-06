@@ -7,20 +7,20 @@ let source_geoq_ChinaOnlineCommunity, source_geoq_ChinaOnlineStreetWarm, source_
 */
 //********************加载在线天地图*************************//
 let source_tiandi = new XYZ({
-    url:"http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=" + "acd48023c7052b05498944b04ffa7b29"
+    url: "http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=" + "acd48023c7052b05498944b04ffa7b29"
 })
 
 //********************加载在线天地卫星影像地图*************************//
 let source_tiandisat = new XYZ({
-    url:"http://t0.tianditu.com/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=" + "acd48023c7052b05498944b04ffa7b29"
+    url: "http://t0.tianditu.com/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=" + "acd48023c7052b05498944b04ffa7b29"
 })
 
 //天地图labels图层,天地图所有图层都要用
 let source_tdtlabeldz = new XYZ({
-    url:"http://t0.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=" + "acd48023c7052b05498944b04ffa7b29"
+    url: "http://t0.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=" + "acd48023c7052b05498944b04ffa7b29"
 })
 let source_tdtlabelwx = new XYZ({
-    url:"http://t0.tianditu.com/DataServer?T=cia_w&x={x}&y={y}&l={z}&tk=" + "acd48023c7052b05498944b04ffa7b29"
+    url: "http://t0.tianditu.com/DataServer?T=cia_w&x={x}&y={y}&l={z}&tk=" + "acd48023c7052b05498944b04ffa7b29"
 })
 
 //********************加载在线高德地图*************************//
@@ -80,31 +80,31 @@ let mapLabel = [
             }
         ]
     },
-    {
-        label: '智图在线地图（ArcGIS REST）',
-        options: [
-            {
-                value: 'geoqcs',
-                label: '彩色地图'
-            },
-            {
-                value: 'geoqns',
-                label: '暖色地图'
-            },
-            {
-                value: 'geoqhs',
-                label: '灰色地图'
-            },
-            {
-                value: 'geoqlh',
-                label: '蓝黑地图'
-            }
-        ]
-    }
+    // {
+    //     label: '智图在线地图（ArcGIS REST）',
+    //     options: [
+    //         {
+    //             value: 'geoqcs',
+    //             label: '彩色地图'
+    //         },
+    //         {
+    //             value: 'geoqns',
+    //             label: '暖色地图'
+    //         },
+    //         {
+    //             value: 'geoqhs',
+    //             label: '灰色地图'
+    //         },
+    //         {
+    //             value: 'geoqlh',
+    //             label: '蓝黑地图'
+    //         }
+    //     ]
+    // }
 ]
 
-let maplist ={
-    basemapLabel: mapLabel,    
+let maplist = {
+    basemapLabel: mapLabel,
     tdtdz: source_tiandi,
     tdtlabeldz: source_tdtlabeldz,
     tdtwx: source_tiandisat,

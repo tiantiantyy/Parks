@@ -2,7 +2,7 @@
   <div class="container-all" >
     <h1>这里是高德评分榜单</h1>
     <div class="block-all">
-      <el-button @click="decreaseValue(value)">-</el-button>
+      <el-button size="mini" @click="decreaseValue(value)">-</el-button>
       <div class="block">
         <el-slider
           v-model="value"
@@ -13,7 +13,7 @@
           @change="handleSliderChange">
         </el-slider>
       </div>
-    <el-button @click="increaseValue(value)">+</el-button>
+    <el-button size="mini" @click="increaseValue(value)">+</el-button>
   </div>
   <ul v-for="(score, index) in scoreData" :key="index" >
       <li>
@@ -225,6 +225,7 @@ position: relative;
   padding: 15px;
   .block{
     flex: 1;
+    margin: 0 20px;
   }
 }
 </style>

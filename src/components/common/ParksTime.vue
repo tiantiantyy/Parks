@@ -13,7 +13,6 @@ import TimeSlider from 'ol-ext/control/TimeSlider';
 import { fromLonLat } from 'ol/proj.js';
 
 export default {
-  name: 'App',
   data() {
     return {
       map: null,

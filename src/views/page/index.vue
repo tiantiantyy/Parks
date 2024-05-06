@@ -3,9 +3,10 @@
     <!-- 第一个板块 排行榜 -->
     <panel :width="470" :height="970" position="absolute" :top="0" :left="0" class="scroll">
       <el-tabs type="border-card" style="width: 100%;">
-        <el-tab-pane class="card-display" label="热门推荐" >
+        <!-- <el-tab-pane class="card-display" label="热门推荐" >
             <h1 class="etitle">热门推荐</h1> 
-          </el-tab-pane>
+            <RankRecommend/>
+          </el-tab-pane> -->
           <el-tab-pane class="card-display" label="面积榜单" >
             <RankArea/>
           </el-tab-pane>
@@ -29,7 +30,12 @@
     <panel :width="940" :height="560" position="absolute" :top="0" :left="490" >
     <div class="mapNav">
       <el-menu default-active="1-4-1" class="el-menu-vertical-demo" :collapse="isCollapse" >
-        <el-submenu index="1" >
+        <el-menu-item index="1" @click="resetMapCenter">
+          <i class="el-icon-map-location" ></i>
+          <span slot="title">默认视图</span>
+        </el-menu-item>
+
+        <el-submenu index="2" >
           <template slot="title">
             <i class="el-icon-menu"></i>
             <span slot="title">图层管理</span>
@@ -40,7 +46,7 @@
           </el-menu-item-group>
         </el-submenu>
 
-        <el-submenu  index="2">
+        <el-submenu  index="3">
           <template slot="title">
             <i class="el-icon-thumb"></i>
             <span slot="title">地图交互</span>
@@ -51,16 +57,10 @@
               <el-button type="primary" size="mini" round @click="StartPolygonSelect">框选</el-button>
               <el-button type="primary" size="mini" round @click="StopPolygonSelect">箭头</el-button>
               <el-button type="primary" size="mini" round @click="ApprovalYear">时间</el-button>
-              <el-button type="primary" size="mini" round @click="resetMapCenter">还原地图</el-button>
             </el-row>
-            
-     
           </el-menu-item-group>
         </el-submenu >
-        <el-menu-item index="3" disabled>
-          <i class="el-icon-document"></i>
-          <span slot="title">导航三</span>
-        </el-menu-item>
+        
         <el-menu-item index="4">
           <i class="el-icon-setting"></i>
           <span slot="title">导航四</span>
@@ -88,6 +88,7 @@
 </template>
 
 <script>
+import RankRecommend from '@/components/common/RankRecommend';
 import ParksDetails from '@/components/common/ParksDetails';
 import ParksInfo from '@/components/common/ParksInfo';
 import ParksTable from '@/components/common/ParksTable.vue';
@@ -119,7 +120,8 @@ export default {
     ParksInfo,
     ParksDetails,
     RankArea,
-    RankScore
+    RankScore,
+    RankRecommend
  
   },
   data() {

@@ -2,20 +2,30 @@
   <div>
     <div class="container-index" v-show="!ifShow" >
     <div class="title">
-    <h1 >这里是公园详情页</h1>
+    <h1 >热门推荐</h1>
     <p class="slogan">这47个中国世界地质公园，你打卡了几处？</p>
     </div>
    <div class="content">
-    <img src="https://imagepphcloud.thepaper.cn/pph/image/77/502/524.jpg" alt="">
+    <!-- <img src="https://imagepphcloud.thepaper.cn/pph/image/77/502/524.jpg" alt="">
     <img src="http://www.globalgeopark.org.cn/UploadFiles/2024_4_16/bsi202404163064589.JPG" alt="">
-    <img src="http://www.globalgeopark.org.cn/UploadFiles/2024_4_16/bsi202404166390038.jpg" alt="">
-    <p class="introduce">{{park['DETAILS']}}</p>
+    <img src="http://www.globalgeopark.org.cn/UploadFiles/2024_4_16/bsi202404166390038.jpg" alt=""> -->
+    <div class="container-all">
+    <div class="top">
+      <img src="http://www.globalgeopark.org.cn/UploadFiles/2019_10_29/bsi201911197115841.jpg" >
+    </div>
+    <div class="foot">
+      <div class="tags">
+        <i>标签1</i>
+      <i>标签2</i>
+    </div>
+     <div class="name">黄山世界地质公园</div>
+    </div>
+
+  </div>
   </div>
   
 
-  <div class="link" v-show="park['URL']">
-    <span>官方网站：<a :href="park['URL']" target="_blank">{{park['URL']}}</a></span>
-  </div>
+
 
   
 </div>
@@ -70,7 +80,34 @@ export default{
 </script>
 
 <style lang="less" scoped>
-
+.container-all{
+  width: 100%;
+  height: 100%;
+  img{
+    width: 100%;
+    height: 100%;
+    border-radius: 10px 10px 0px 0px;
+  }
+  .top{
+    margin-bottom:20px ;
+  }
+  .foot{
+    
+  }
+  .tags{
+    margin-bottom:20px ;
+    i{
+      padding: 10px;
+      margin-right: 10px;
+      border-radius: 10px;
+      background-color:rgb(60, 60, 67);
+      color: white;
+    }
+  }
+  .name{
+    font-size: 20px;
+  }
+}
 .title{
   font-size: 20px;
   font-weight: 700;

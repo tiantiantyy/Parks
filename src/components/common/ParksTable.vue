@@ -1,16 +1,17 @@
 <template>
   <div>
-    <div style="margin-top: 15px;">
+    <div>
       <el-input placeholder="请输入内容" v-model.trim="input" class="input-with-select" > 
         <el-select v-model="select" slot="prepend" placeholder="请选择">
           <el-option label="按名称" value="1"></el-option>
           <el-option label="按省份" value="2"></el-option>
         </el-select>
         <el-button slot="append" icon="el-icon-search" @click="searchInfo(input)"></el-button>
+        <el-button slot="append" @click="queryInfo">还原</el-button>
       </el-input>
     </div>
 
-    <button @click="queryInfo">还原</button>
+
   <el-table
     :data="tableData"
     height="370"

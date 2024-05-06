@@ -53,10 +53,10 @@ export default {
       gaodedz: mapSources.gaodedz,
       gaodewx: mapSources.gaodewx,
       gaodelabelwx: mapSources.gaodelabelwx,
-      geoqcs: mapSources.geoqcs,
-      geoqns: mapSources.geoqns,
-      geoqhs: mapSources.geoqhs,
-      geoqlh: mapSources.geoqlh,
+      // geoqcs: mapSources.geoqcs,
+      // geoqns: mapSources.geoqns,
+      // geoqhs: mapSources.geoqhs,
+      // geoqlh: mapSources.geoqlh,
 			proj: 'EPSG:4326', //定义wgs84地图坐标系
 			proj_m: 'EPSG:3857', //定义墨卡托地图坐标系
       layers: {}, // 用于存储图层的对象
@@ -346,38 +346,38 @@ export default {
           this.map.addLayer(this.mapLayer)
           this.map.addLayer(this.mapLayerlabel)
           break;
-        case 'geoqcs':
-          this.mapLayer = new TileLayer({
-            source: this.geoqcs,
-            projection: this.proj,
-            zIndex: 0 // 底图的zIndex设置为最小值
-          })
-          this.map.addLayer(this.mapLayer)
-          break;
-        case 'geoqns':
-          this.mapLayer = new TileLayer({
-            source: this.geoqns,
-            projection: this.proj,
-            zIndex: 0 // 底图的zIndex设置为最小值
-          })
-          this.map.addLayer(this.mapLayer)
-          break;
-        case 'geoqhs':
-          this.mapLayer = new TileLayer({
-            source: this.geoqhs,
-            projection: this.proj,
-            zIndex: 0 // 底图的zIndex设置为最小值
-          })
-          this.map.addLayer(this.mapLayer)
-          break;
-        case 'geoqlh':
-          this.mapLayer = new TileLayer({
-            source: this.geoqlh,
-            projection: this.proj,
-            zIndex: 0 // 底图的zIndex设置为最小值
-          })
-          this.map.addLayer(this.mapLayer)
-          break;
+        // case 'geoqcs':
+        //   this.mapLayer = new TileLayer({
+        //     source: this.geoqcs,
+        //     projection: this.proj,
+        //     zIndex: 0 // 底图的zIndex设置为最小值
+        //   })
+        //   this.map.addLayer(this.mapLayer)
+        //   break;
+        // case 'geoqns':
+        //   this.mapLayer = new TileLayer({
+        //     source: this.geoqns,
+        //     projection: this.proj,
+        //     zIndex: 0 // 底图的zIndex设置为最小值
+        //   })
+        //   this.map.addLayer(this.mapLayer)
+        //   break;
+        // case 'geoqhs':
+        //   this.mapLayer = new TileLayer({
+        //     source: this.geoqhs,
+        //     projection: this.proj,
+        //     zIndex: 0 // 底图的zIndex设置为最小值
+        //   })
+        //   this.map.addLayer(this.mapLayer)
+        //   break;
+        // case 'geoqlh':
+        //   this.mapLayer = new TileLayer({
+        //     source: this.geoqlh,
+        //     projection: this.proj,
+        //     zIndex: 0 // 底图的zIndex设置为最小值
+        //   })
+        //   this.map.addLayer(this.mapLayer)
+        //   break;
 			}
 
 
