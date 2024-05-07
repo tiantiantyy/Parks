@@ -17,9 +17,10 @@ import "echarts-wordcloud/dist/echarts-wordcloud.min";
         }
       },
       mounted(){
-      
-        this.queryWord();
-       
+        this.$bus.$on('QueryPark',(NAME)=>{
+          console.log("queryWord收到的NAME:",NAME)
+          this.queryWord(NAME)
+            })
       },
       methods: {
         initChart() {
@@ -79,9 +80,15 @@ import "echarts-wordcloud/dist/echarts-wordcloud.min";
           this.chart.setOption(option);
         },
 
-        queryWord(){
+        queryWord(NAME){
+          this.combinedTags=[]
+          console.log( this.combinedTags)
           let self=this
-          axios.get('http://localhost:3000/api/user/notes').then((response) => {
+            axios.get('http://localhost:3000/api/user/notes', {
+                params: {
+                    parameter: NAME
+                }
+            }).then((response) => {
             this.wordData = response.data;
 
             //遍历获得的数据库数据，获取标签字段
@@ -104,25 +111,8 @@ import "echarts-wordcloud/dist/echarts-wordcloud.min";
             console.log("combinedTags", self.combinedTags);
         // console.log("combinedTags[0]", self.combinedTags[0]);
         const topWords = self.topTenWords(self.combinedTags);
-
-
-        // const test= ['#爬山', '#看日出', '#云海', '#日出', '#攻略','#爬山', '#看日出', '#云海', '#日出', '#攻略','#爬山', '#看日出','#爬山'];
-        // const topWords = this.topTenWords( test);
         console.log("前十名",topWords);
-
         console.log("queryWord开始构建词云")
-          // 原始字符串数组
-        // let tags = this.allword;
-        // console.log("tags",tags); // 输出合并后的数组
-      
-        
-        //  // 原始字符串数组
-        //  const tags = ['#爬山', '#看日出', '#云海', '#日出', '#攻略'];
-        //  tags.push('#徒步')
-        // console.log("tags",tags); 
-        // console.log("tags[0]",tags[0]); 
-        // console.log("tags.length",tags.length); 
-
         // 将原始字符串数组转换为 worddata 数组对象
         self.worddata = topWords.map(tag => {
             return {
@@ -143,7 +133,7 @@ import "echarts-wordcloud/dist/echarts-wordcloud.min";
       },
 
 
-
+    // 取出四十个频次最高的词语及其频次
       topTenWords(arr) {
     console.log("调用了topTenWords")
 
@@ -172,8 +162,8 @@ import "echarts-wordcloud/dist/echarts-wordcloud.min";
     // 按照频次降序排序
     wordCountArray.sort((a, b) => b[1] - a[1]);
 
-    // 取出前十个频次最高的词语及其频次
-    let topTen = wordCountArray.slice(0, 50);
+    // 取出四十个频次最高的词语及其频次
+    let topTen = wordCountArray.slice(0, 40);
 
     // 返回结果
     return topTen;
