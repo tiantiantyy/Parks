@@ -36,6 +36,7 @@
     </div>
    <div class="content">
     <img :src="park['IMAGE']" alt="">
+    <EchartsWordcloud/>
     <p class="introduce">{{park['DETAILS']}}</p>
   </div>
   <div class="info">
@@ -52,15 +53,19 @@
   <div class="link" v-show="park['URL']">
     <span>官方网站：<a :href="park['URL']" target="_blank">{{park['URL']}}</a></span>
   </div>
-
-  
+  <div class="worldcloud">
+  </div>
 </div>
 </div>
   
 </template>
 
 <script>
+import EchartsWordcloud from '@/components/common/EchartsWordcloud';
 export default{
+  components:{
+    EchartsWordcloud
+  },
   data(){
     return{
       park:[],
@@ -145,6 +150,11 @@ export default{
 }
 .info{
   display: flex;
+}
+
+.worldcloud{
+  width: 100%;
+  height: 100%;
 }
 }
 </style>

@@ -13,6 +13,9 @@ import Vue from 'vue'
 import App from './App.vue'
 Vue.use(ElementUI);
 
+//引入词云
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts
 
 Vue.config.productionTip = false
 Vue.component('panel', resolve => { require(['@/components/common/panel.vue'], resolve) })

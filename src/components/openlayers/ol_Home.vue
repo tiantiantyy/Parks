@@ -102,6 +102,13 @@ export default {
     this.$bus.$on('resetMapCenter',()=>{
       this.resetMapCenter()
     })
+    this.$bus.$on('LoadProvince',(NAME)=>{
+      this.LoadProvince(NAME)
+    })
+    this.$bus.$on('clearJson',()=>{
+      let jsonName='json'
+      this.removeLayerByName(jsonName)
+    })
   },
   beforeDestroy() {
         // 组件销毁前移除事件监听器
@@ -139,32 +146,14 @@ export default {
         projection: this.proj
       })
      
-   
-      //将图层加载到地图对象
-      // this.mapLayer = new TileLayer({
-      //       source: this.geoqcs,
-      //       projection: this.proj
-      //     })
       this.map.addLayer(this.mapLayer)
-
-
-  //     //添加底图滤镜
-  //     this.map.on('precompose', function(evt){
-  //     let ctx = evt.context;
-  //     ctx.filter = filter;//设置滤镜值
-  // })
-  //     this.map.render();
-
-      
-
-      // this.map.addLayer(this.mapLayerlabel)
+    
       this.loadjson()
       const self = this;
       this.map.on('click',event=>{
       
+        //点选交互
         let coor=event.coordinate;
-        // let coor4326 = transform(coor, 'EPSG:3857', 'EPSG:4326'); // 将坐标从 EPSG:3857 转换成 EPSG:4326
-
         // 计算容差范围
         let tolerance = 40000; // 容差值，单位为像素
         let extent = [
@@ -206,6 +195,57 @@ export default {
     }
   );
 
+    },
+    /******************根据省份名称查询json***************/
+    LoadProvince(NAME)
+    {
+      console.log("LoadProvince的NAME：",NAME)
+      // 使用 Axios 加载 JSON 数据
+      axios.get('/china.json')
+      .then(response => {
+        // 将响应数据传递给 GeoJSON 格式器并读取要素
+        // const features = new GeoJSON().readFeatures(response.data);
+        const features = new GeoJSON().readFeatures(response.data, {
+          dataProjection: 'EPSG:4326',
+          featureProjection: 'EPSG:3857'
+        });
+         // 遍历要素并筛选出符合条件的要素
+    const filteredFeatures = features.filter(feature => feature.get('name') === NAME);
+
+    // 输出符合条件的要素
+    console.log(filteredFeatures);
+
+        // 创建 GeoJSON 图层并添加到地图上
+        const geoJSONLayer = new VectorLayer({
+          zIndex: 10,
+          source: new VectorSource({
+            features: filteredFeatures
+          }),
+          style: new Style({
+            stroke: new Stroke({
+              color: "#ff0000", // 描边红色
+              width: 2 // 设置描边宽度为 1 像素
+            }),
+            fill: new Fill({
+              color: "#ff000020" // 填充红色透明
+            })
+          })
+        });
+        // console.log(geoJSONLayer)
+        this.addLayer(geoJSONLayer,'json');
+        // 缩放地图至适合要素
+        this.map.getView().fit(geoJSONLayer.getSource().getExtent(), {
+          padding: [20, 20, 20, 20], // 可选项，指定地图边缘的填充
+          duration: 1000 // 可选项，动画持续时间
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching JSON data:', error);
+      });
+
+    },
+    clearJson(){
+      
     },
     /******************根据公园名称向查询后端公园信息***************/
     QueryPark(NAME){
@@ -291,8 +331,6 @@ export default {
 
 		/******************地图切换方法***************/
 		changeBaseMap: function(value) {
-      console.log(value)
-      this.hideOverlay()//消除overlay
       this.map.removeLayer(this.mapLayer)
       this.map.removeLayer(this.mapLayerlabel)
 			switch (value) {
@@ -647,43 +685,7 @@ export default {
             this.removeLayerByName('Notes')
           }
   },
-  /******************鼠标点击geojson的响应函数***************/ 
-//    showOverlayOnClick(name,province,event) {
-//     // 首先销毁之前的 overlay
-//     if (this.overlay) {
-//     console.log("消除overlay")
-
-//         this.map.removeOverlay(this.overlay);
-//         this.overlay = null;
-//     }
-
-//     // console.log("进入了showOverlayOnClick")
-//   // 获取点击坐标
-//   const coordinates = event.coordinate;
-// console.log(coordinates)
-//   // 创建 overlay 元素
-//   const overlayElement = document.createElement('div');
-//   overlayElement.className = 'custom-overlay';
-//   overlayElement.innerHTML = `<div class="overlay-content">${name}</div><br><p>${province}</p>`;
-//   overlayElement.style.background = 'white';
-//   overlayElement.style.padding = '10px';
-//   overlayElement.style.border = '1px solid black';
-
-//   // 创建 overlay
-//   console.log("创建overlay")
-
-//   this.overlay = new Overlay({
-//     element: overlayElement,
-//     positioning: 'bottom-center',
-//     offset: [0, -20], // 偏移量，用于调整 overlay 的位置
-//   });
-
-//   // 将 overlay 添加到地图上，并设置其位置为点击的坐标
-//   this.map.addOverlay(this.overlay);
-//   this.overlay.setPosition(coordinates);
-// },
-
-
+  
   // 隐藏 overlay
   hideOverlay() {
     if (this.overlay) {

@@ -7,7 +7,7 @@
           <el-option label="按省份" value="2"></el-option>
         </el-select>
         <el-button slot="append" icon="el-icon-search" @click="searchInfo(input)"></el-button>
-        <el-button slot="append" @click="queryInfo">还原</el-button>
+        <el-button slot="append" @click="queryInfo">重置</el-button>
       </el-input>
     </div>
 
@@ -78,6 +78,8 @@ import axios from 'axios';
     },
     methods:{
       searchInfo(NAME){
+        //清除图层的信号
+        this.$bus.$emit('clearJson');
 
         console.log(this.select)
         if(this.select=='1'){
@@ -85,8 +87,9 @@ import axios from 'axios';
 
         }
         else if(this.select=='2'){
-          // console.log("queryProvince",NAME)
+
           this.queryProvince(NAME)
+          this.$bus.$emit('LoadProvince',NAME)
             }
         else{
           alert("请选择搜索类型")
@@ -94,6 +97,11 @@ import axios from 'axios';
       },
       //调后端数据
       queryInfo () {
+
+        this.$bus.$emit('clearJson'); //清除图层的信号
+        this.clearInput();//清除搜索
+        this.$bus.$emit('resetMapCenter');//重置地图视图
+
         axios.get('http://localhost:3000/api/user/query').then((response) => {
             this.tableData = response.data;
         })
@@ -114,8 +122,7 @@ import axios from 'axios';
     this.$bus.$emit('QueryPark', NAME);
        },
     clearInput(){
-      console.log("clearInput被调用了")
-
+      // console.log("clearInput被调用了")
         this.input=''
       },
       //按省份查询后端数据

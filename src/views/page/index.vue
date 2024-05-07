@@ -72,7 +72,7 @@
     </panel>
 
     <!-- 第三个板块 公园详情 -->
-    <panel :width="470" :height="970" position="absolute" :top="0" :left="1450" class="p20">
+    <panel :width="470" :height="970" position="absolute" :top="0" :left="1450" class="p20 scroll">
       <ParksDetails/>
     </panel>
     
