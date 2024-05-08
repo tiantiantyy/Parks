@@ -1,6 +1,7 @@
 <template>
   <section class="container">
-    <panel :width="1300" :height="970" position="absolute" :top="0" :left="0" class="p20">
+    <panel :width="1300" :height="970" position="absolute" :top="0" :left="0" >
+    <Gaode/>
     </panel>
 
     <panel :width="600" :height="970" position="absolute" :top="0" :left="1320" >
@@ -12,8 +13,6 @@
 </template>
 
 <script>
-import { imgListDataSource, progressDataSource } from '@/common/mockData';
-import { randomArray, randomChartList } from '@/common/utils';
 
 import echartsAreas from '@/components/common/chartStatistics/echartsAreas.vue';
 import echartsRank from '@/components/common/chartStatistics/echartsRank.vue';
@@ -23,6 +22,7 @@ import statisticsByBarAndLine from '@/components/common/chartStatistics/statisti
 import statisticsByLine from '@/components/common/chartStatistics/statisticsByLine';
 import galleryBox from '@/components/common/galleryBox';
 import ganttChart from '@/components/common/ganttChart';
+import Gaode from '@/components/common/Gaode';
 
 
 export default {
@@ -34,7 +34,7 @@ export default {
     statisticsByBarAndLine,
     echartsAreas,
     echartsRank,
-   
+    Gaode
   },
 }
 </script>
