@@ -1,5 +1,5 @@
 <template>
-  <div id="mywordcloud"   :style="{width: '100vh', height: '300px'}" :data="worddata"></div>
+  <div id="mywordcloud"   :style="{width: '100%', height: '300px'}" :data="worddata"></div>
 </template>
 <script>
 import axios from 'axios';
@@ -24,7 +24,6 @@ import "echarts-wordcloud/dist/echarts-wordcloud.min";
       },
       methods: {
         initChart() {
-        
           this.chart = echarts.init(document.getElementById("mywordcloud"));
           console.log('lll');
           const option = {
@@ -82,7 +81,7 @@ import "echarts-wordcloud/dist/echarts-wordcloud.min";
 
         queryWord(NAME){
           this.combinedTags=[]
-          console.log( this.combinedTags)
+          // console.log( this.combinedTags)
           let self=this
             axios.get('http://localhost:3000/api/user/notes', {
                 params: {
@@ -108,11 +107,11 @@ import "echarts-wordcloud/dist/echarts-wordcloud.min";
     
         }).then(
           function(){
-            console.log("combinedTags", self.combinedTags);
+            // console.log("combinedTags", self.combinedTags);
         // console.log("combinedTags[0]", self.combinedTags[0]);
         const topWords = self.topTenWords(self.combinedTags);
-        console.log("前十名",topWords);
-        console.log("queryWord开始构建词云")
+        // console.log("前十名",topWords);
+        // console.log("queryWord开始构建词云")
         // 将原始字符串数组转换为 worddata 数组对象
         self.worddata = topWords.map(tag => {
             return {
@@ -122,7 +121,7 @@ import "echarts-wordcloud/dist/echarts-wordcloud.min";
             };
         });
 
-        console.log(self.worddata);
+        // console.log(self.worddata);
         self. initChart()
           }
         )
@@ -135,11 +134,11 @@ import "echarts-wordcloud/dist/echarts-wordcloud.min";
 
     // 取出四十个频次最高的词语及其频次
       topTenWords(arr) {
-    console.log("调用了topTenWords")
+    // console.log("调用了topTenWords")
 
     // 创建一个 Map 对象来存储词语及其频次
     let wordCount = new Map();
-    console.log("arr:",arr)
+    // console.log("arr:",arr)
 
     // console.log("arr[1]:",arr[1])
 
@@ -158,7 +157,7 @@ import "echarts-wordcloud/dist/echarts-wordcloud.min";
 
     // 将 Map 转换为数组，便于排序
     let wordCountArray = Array.from(wordCount);
-    console.log(wordCountArray)
+    // console.log(wordCountArray)
     // 按照频次降序排序
     wordCountArray.sort((a, b) => b[1] - a[1]);
 

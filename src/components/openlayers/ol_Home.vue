@@ -64,7 +64,6 @@ export default {
 			mapLayer: null,
 			mapLayerlabel: null,
       geojson:geoparks,
-      overlay:null,//弹窗
       selectTableData:[],//点选中的park信息
       refreshInterval: 5000,//渲染间隔时间
       PointSelectPark:null
@@ -244,12 +243,9 @@ export default {
       });
 
     },
-    clearJson(){
-      
-    },
     /******************根据公园名称向查询后端公园信息***************/
     QueryPark(NAME){
-      console.log("ol_Home接收",NAME)
+      // console.log("ol_Home接收",NAME)
       let self=this
           //向后端传参框选得到的地质公园名称
           axios.get('http://localhost:3000/api/user/PointSelect', {
@@ -258,7 +254,7 @@ export default {
                 }
             })
             .then(function (response) {
-                console.log(response.data)
+                // console.log(response.data)
                 self.PointSelectPark=response.data[0];
                 let parkInfo=self.PointSelectPark;
                 self.delayParkInfo(parkInfo);
@@ -651,7 +647,7 @@ export default {
     // 更新地图视图的中心点
     this.map.getView().setCenter(center);
   },
-     /******************方法用于设置地图视图的中心点***************/
+     /******************方法用于设置地图默认视图的中心点***************/
   resetMapCenter() {
     // 将经纬度转换为地图坐标系的中心点
     let zoom=4;
