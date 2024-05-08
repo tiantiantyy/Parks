@@ -33,12 +33,18 @@ export default{
 }
   },
   mounted(){
-    this.queryInfo()
+    this.$bus.$on('QueryPark',(NAME)=>{
+      this.queryInfo(NAME)
+    })
   },
   methods:{
     //用于后端数据库的查询
-    queryInfo () {
-             axios.get('http://localhost:3000/api/user/notes').then((response) => {
+    queryInfo (NAME) {
+      axios.get('http://localhost:3000/api/user/notes', {
+                params: {
+                    parameter: NAME
+                }
+            }).then((response) => {
             this.notesData=response.data
             // console.log(this.notesData)
             // console.log(this.commentsData[0]['评论者昵称'])

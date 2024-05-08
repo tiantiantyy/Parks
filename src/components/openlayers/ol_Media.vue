@@ -16,7 +16,7 @@ export default{
   methods:{
       // 改变 ol_Home 的底图
     someMethod() {
-      this.$refs.olHomeRef.changeBaseMap("tdtdz");
+      this.$refs.olHomeRef.changeBaseMap("tdtys");
 }
   }
 }

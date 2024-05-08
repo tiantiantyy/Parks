@@ -137,7 +137,7 @@ export default {
       //初始化地图图层
       this.mapLayer = new TileLayer({
         source: this.tdtdz,
-        className:'blueLayer',//增加className属性
+        className:'greenLayer',//增加className属性
       })
       //初始化标签图层
       this.mapLayerlabel = new TileLayer({
@@ -330,6 +330,21 @@ export default {
       this.map.removeLayer(this.mapLayer)
       this.map.removeLayer(this.mapLayerlabel)
 			switch (value) {
+        case 'tdtys':
+          this.mapLayer = new TileLayer({
+            source: this.tdtdz,
+            projection: this.proj,
+            zIndex: 0, // 底图的zIndex设置为最小值
+            className:'blueLayer',//增加className属性
+          })
+          // this.mapLayerlabel = new TileLayer({
+          //   source: this.tdtlabeldz,
+          //   projection: this.proj,
+          //   zIndex: 0 // 底图的zIndex设置为最小值
+          // })
+          this.map.addLayer(this.mapLayer)
+          // this.map.addLayer(this.mapLayerlabel)
+          break;
         case 'tdtdz':
           this.mapLayer = new TileLayer({
             source: this.tdtdz,
@@ -344,6 +359,7 @@ export default {
           this.map.addLayer(this.mapLayer)
           this.map.addLayer(this.mapLayerlabel)
           break;
+          
         case 'tdtwx':
           this.mapLayer = new TileLayer({
             source: this.tdtwx,

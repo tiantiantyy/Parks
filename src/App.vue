@@ -44,11 +44,19 @@ export default{
 </script>
 
 <style>
+.greenLayer{
+    /* filter:grayscale(500%) invert(10%); */
+    filter: grayscale(6%) sepia(22%) invert(29%) hue-rotate(272deg) saturate(120%) contrast(260%) brightness(94%);
+
+    /* filter:grayscale(500%) sepia(11%) invert(5%) saturate(10%); */
+
+    /* filter:grayscale(100%) sepia(51%) invert(100%) saturate(350%) ; */
+}
 .blueLayer{
     /* filter:grayscale(500%) invert(10%); */
     filter:grayscale(220%) sepia(2%) invert(5%) ;
     /* filter:grayscale(500%) sepia(11%) invert(5%) saturate(10%); */
-
+    /* filter: invert(97%) sepia(71%) saturate(783%) hue-rotate(152deg) brightness(84%) contrast(89%); */
     /* filter:grayscale(100%) sepia(51%) invert(100%) saturate(350%) ; */
 }
 </style>

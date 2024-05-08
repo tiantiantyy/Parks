@@ -1,14 +1,14 @@
 <template>
   <section class="container">
-    <panel :width="470" :height="970" position="absolute" :top="0" :left="0" class=" comments ">
-      <ParksPost/>
+    <panel :width="470" :height="970" position="absolute" :top="0" :left="0" class="scroll">
+    <ParksMediaList/>
     </panel>
 
     <panel :width="940" :height="560" position="absolute" :top="0" :left="490" >
       <ol_Media/>
     </panel>
-    <panel :width="470" :height="970" position="absolute" :top="0" :left="1450" class="comments p20">
-      <Comments/>
+    <panel :width="470" :height="970" position="absolute" :top="0" :left="1450" class="scroll">
+      <ParksPost/>
       
     </panel>
 
@@ -26,7 +26,7 @@
 import echartsAreas from '@/components/common/chartStatistics/echartsAreas.vue';
 import echartsRank from '@/components/common/chartStatistics/echartsRank.vue';
 
-import Comments from '@/components/common/Comments.vue';
+import ParksMediaList from '@/components/common/ParksMediaList.vue';
 import ParksPost from '@/components/common/ParksPost.vue';
 import statisticsByBar from '@/components/common/chartStatistics/statisticsByBar';
 import statisticsByBarAndLine from '@/components/common/chartStatistics/statisticsByBarAndLine';
@@ -45,16 +45,16 @@ export default {
     statisticsByBarAndLine,
     echartsAreas,
     echartsRank,
-    Comments,
     ParksPost,
-    ol_Media
+    ol_Media,
+    ParksMediaList
    
   },
 }
 </script>
 
 <style lang="less" scoped>
-.comments{
+.scroll{
   // padding: 10px;
   overflow: scroll!important;;
 }
