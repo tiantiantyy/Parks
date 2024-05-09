@@ -1,5 +1,5 @@
 <template>
-  <div id="mywordcloud"   :style="{width: '100%', height: '300px'}" :data="worddata"></div>
+  <div id="mywordcloud" :style="{width: '100%', height: '300px'}" :data="worddata"></div>
 </template>
 <script>
 import axios from 'axios';
@@ -17,8 +17,8 @@ import "echarts-wordcloud/dist/echarts-wordcloud.min";
         }
       },
       mounted(){
-        this.$bus.$on('QueryPark',(NAME)=>{
-          console.log("queryWord收到的NAME:",NAME)
+        this.$bus.$on('parkWordCloud',(NAME)=>{
+          console.log("词云queryWord收到的NAME:",NAME)
           this.queryWord(NAME)
             })
       },

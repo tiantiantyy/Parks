@@ -53,7 +53,7 @@
   <div class="link" v-show="park['URL']">
     <span>官方网站：<a :href="park['URL']" target="_blank">{{park['URL']}}</a></span>
   </div>
-  <div class="worldcloud">
+  <div class="worldcloud ">
   </div>
 </div>
 </div>
@@ -74,11 +74,16 @@ export default{
   },
   mounted(){
     this.$bus.$on('park', this.parkInfo);
+    this.$bus.$on('park', this.parkWordCloud);
   },
   methods:{
     parkInfo(parkInfo){
       this.park=parkInfo
       this.ifShow=true
+    },
+    parkWordCloud(){
+      let NAME=this.park['NAME']
+      this.$bus.$emit('parkWordCloud', NAME);
     }
   }
 }

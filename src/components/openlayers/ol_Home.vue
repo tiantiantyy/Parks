@@ -254,10 +254,13 @@ export default {
                 }
             })
             .then(function (response) {
+   
                 // console.log(response.data)
                 self.PointSelectPark=response.data[0];
                 let parkInfo=self.PointSelectPark;
                 self.delayParkInfo(parkInfo);
+
+
                 let LON=self.PointSelectPark["LONGITUDE"];
                 let LAT=self.PointSelectPark["LATITUDE"];
                 self.setMapCenter(LON,LAT)
@@ -268,6 +271,7 @@ export default {
               self.PointSelectPark=[];
                 console.log(error);
             });
+            
     },
     /******************加载Geoserver图层***************/
     loadjson:function(checked=true){
@@ -706,6 +710,7 @@ export default {
     }
   },
   delayParkInfo(parkInfo){
+
     this.$bus.$emit('park', parkInfo);
   }
 
