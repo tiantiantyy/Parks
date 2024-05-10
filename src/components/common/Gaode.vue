@@ -1,10 +1,20 @@
 <template>
-<div>
-    起始位置：<el-input id="start" v-model="startName"></el-input>
-    结束位置：<el-input id="end" v-model="endName"></el-input>
+<div class="container-all">
+  <div class="float">
+    <div class="left">
+    出发地：<el-input id="start" v-model="startName"></el-input>
+    目的地：<el-input id="end" v-model="endName"> <el-button slot="append" @click="myloacation">我的位置</el-button></el-input>
+   
     <el-button @click="goView">查询</el-button>
-    <div id="container" />
+ 
   </div>
+  <div class="right">
+    <div id="my-panel"></div>
+  </div>
+
+  </div>
+  <div id="container" />
+</div>
 </template>
 
 <script>
@@ -27,10 +37,42 @@ export default {
   },
 
   methods:{
+
+    myloacation(){
+      console.log("myloacation被调用了")
+     let options = {
+        'showButton': true,//是否显示定位按钮
+		'position': 'LB',//定位按钮的位置
+		/* LT LB RT RB */
+		'offset': [10, 20],//定位按钮距离对应角落的距离
+		'showMarker': true,//是否显示定位点
+		'markerOptions':{//自定义定位点样式，同Marker的Options
+		  'offset': new AMap.Pixel(-18, -36),
+		  'content':'<img src="https://a.amap.com/jsapi_demos/static/resource/img/user.png" style="width:36px;height:36px"/>'
+		},
+		'showCircle': true,//是否显示定位精度圈
+		'circleOptions': {//定位精度圈的样式
+			'strokeColor': '#0093FF',
+			'noSelect': true,
+			'strokeOpacity': 0.5,
+			'strokeWeight': 1,
+			'fillColor': '#02B0FF',
+			'fillOpacity': 0.25
+		}
+    }
+    AMap.plugin(["AMap.Geolocation"], function() {
+        
+      let geolocation = new AMap.Geolocation(options);
+        this.map.addControl(geolocation);
+        geolocation.getCurrentPosition()
+    });
+    },
     goView() {
       // eslint-disable-next-line no-undef
       const driving = new AMap.Driving({
         map: this.map,
+         //panel 指定将结构化的路线详情数据显示的对应的 DOM 上，传入值需是 DOM 的 ID
+        panel: "my-panel",
         // 驾车路线规划策略，AMap.DrivingPolicy.LEAST_TIME是最快捷模式
         // eslint-disable-next-line no-undef
         policy: AMap.DrivingPolicy.LEAST_TIME
@@ -44,22 +86,48 @@ export default {
         // 未出错时，result即是对应的路线规划方案
         console.log('status=', status)
         console.log('result=', result)
+
       })
     },
     initMap(){
         AMapLoader.load({
             key:"29c7f15386a9204544b833cb6422d9ae",             // 申请好的Web端开发者Key，首次调用 load 时必填
             version:"2.0",      // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
-            plugins: ['AMap.ToolBar', 'AMap.Driving', 'AMap.AutoComplete'] // 需要使用的的插件列表，如比例尺'AMap.Scale'等
-        }).then((AMap)=>{
+            plugins: ['AMap.ToolBar', 'AMap.Driving', 'AMap.AutoComplete'], // 需要使用的的插件列表，如比例尺'AMap.Scale'等
+            AMapUI: {
+                version: "1.1",
+                plugins: [],
+              },
+            Loca: {
+                version: "2.0.0"}
+
+          }).then((AMap)=>{
             this.map = new AMap.Map("container",{  //设置地图容器id
-                viewMode:"3D",    //是否为3D地图模式
-                zoom:4,           //初始化地图级别
+                // viewMode:"3D",    //是否为3D地图模式
+                zoom:4.5,           //初始化地图级别
                 center:[101.46912, 36.24274], //初始化地图中心点位置
                 mapStyle: "amap://styles/whitesmoke"
             });
 
-            const autoOptions = {
+            // 高德添加geoserve图层
+          let layer = new AMap.TileLayer.WMS({
+          url: "http://localhost:8080/geoserver/GeoParks/wms",
+          params: {
+            LAYERS: "GeoParks:geoparks",
+            STYLES: "geoparks_poi_style",
+            VERSION: "1.1.0",
+            tiled: true
+          },
+          serverType: "geoserver",
+            })
+          this.map.add(layer)
+           
+      
+
+
+          
+      //路径规划
+      const autoOptions = {
           // city 限定城市，默认全国
           city: '全国',
           input: 'start'
@@ -93,11 +161,39 @@ export default {
 
 
 <style lang="less" scoped>
+.container-all{
+  height: 100%;
+  position: relative;
+  .float{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    .left{
+      margin-left: 20px;
+    }
+    .right{
+      height: 960px;
+      position: absolute;
+      top: 0;
+      left: 1400px;
+      overflow-y: scroll;
+      #my-panel{
+        width:500px;
+        height: 100%;
+        overflow-y: scroll;
+      }
+  }
+  }
+  
+  
+}
 #container{
   padding:0px;
   margin: 0px;
   width: 100%;
-  height: 800px;
+  height: 100%;
+  overflow: hidden;
 }
 #panel {
   position: fixed;

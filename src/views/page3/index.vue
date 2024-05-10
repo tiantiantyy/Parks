@@ -1,10 +1,7 @@
 <template>
   <section class="container">
-    <panel :width="1300" :height="970" position="absolute" :top="0" :left="0" >
+    <panel :width="1920" :height="970" position="absolute" :top="0" :left="0"  class="scroll">
     <Gaode/>
-    </panel>
-
-    <panel :width="600" :height="970" position="absolute" :top="0" :left="1320" >
     </panel>
   
 
@@ -40,6 +37,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+.scroll{
+  overflow: scroll!important;
+}
 </style>
 

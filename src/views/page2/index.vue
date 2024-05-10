@@ -5,6 +5,7 @@
     </panel>
 
     <panel :width="940" :height="560" position="absolute" :top="0" :left="490" >
+      <MapControls/>
       <ol_Media/>
     </panel>
     <panel :width="470" :height="970" position="absolute" :top="0" :left="1450" class="scroll">
@@ -13,8 +14,7 @@
     </panel>
 
     <panel :width="940" :height="380" position="absolute" :top="590" :left="490" class="p20">
-      <p class="panel-title">echart图表</p>
-  
+  <echartsHot/>
     </panel>
 
   
@@ -25,6 +25,7 @@
 
 import echartsAreas from '@/components/common/chartStatistics/echartsAreas.vue';
 import echartsRank from '@/components/common/chartStatistics/echartsRank.vue';
+import echartsHot from '@/components/common/chartStatistics/echartsHot.vue';
 
 import ParksMediaList from '@/components/common/ParksMediaList.vue';
 import ParksPost from '@/components/common/ParksPost.vue';
@@ -34,6 +35,7 @@ import statisticsByLine from '@/components/common/chartStatistics/statisticsByLi
 import galleryBox from '@/components/common/galleryBox';
 import ganttChart from '@/components/common/ganttChart';
 // import ol_Home from '@/components/openlayers/ol_Home';
+import MapControls from '../../components/common/MapControls.vue';
 import ol_Media from '../../components/openlayers/ol_Media.vue';
 
 export default {
@@ -47,7 +49,9 @@ export default {
     echartsRank,
     ParksPost,
     ol_Media,
-    ParksMediaList
+    ParksMediaList,
+    MapControls,
+    echartsHot
    
   },
 }
