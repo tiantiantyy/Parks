@@ -1,7 +1,7 @@
 <template>
   <section class="container">
     <!-- 第一个板块 地质公园信息 -->
-    <panel :width="470" :height="970" position="absolute" :top="0" :left="0" class="p20 scroll bg">
+    <panel :width="470" :height="970" position="absolute" :top="0" :left="0" class="p20 scroll">
       <ParksDetails/>
     </panel>
 
@@ -35,7 +35,7 @@
             <el-row>
               <el-button type="primary" size="mini" round @click="StartPolygonSelect">框选</el-button>
               <el-button type="primary" size="mini" round @click="StopPolygonSelect">箭头</el-button>
-              <el-button type="primary" size="mini" round @click="ApprovalYear">时间</el-button>
+              <!-- <el-button type="primary" size="mini" round @click="ApprovalYear">时间</el-button> -->
             </el-row>
           </el-menu-item-group>
         </el-submenu >
@@ -66,13 +66,13 @@
           <RankScore/>
         </el-tab-pane>
           <el-tab-pane class="card-display" label="热度榜单">
-            <h1 class="etitle">地质公园热度排行</h1> 
-            <echartsRank/>
+            <!-- <h1 class="etitle">地质公园热度排行</h1>  -->
+       
           </el-tab-pane>
          
           <el-tab-pane class="card-display" label="攻略榜单">
-            <h1 class="etitle">小红书攻略数</h1> 
-            <echartsAreas/>
+            <!-- <h1 class="etitle">小红书攻略数</h1>  -->
+            <RankHot/>
           </el-tab-pane>
   </el-tabs>
   
@@ -94,6 +94,7 @@ import ParksTable from '@/components/common/ParksTable.vue';
 import RankArea from '@/components/common/RankArea';
 import RankRecommend from '@/components/common/RankRecommend';
 import RankScore from '@/components/common/RankScore';
+import RankHot from '@/components/common/RankHot';
 import echartsAreas from '@/components/common/chartStatistics/echartsAreas.vue';
 import echartsRank from '@/components/common/chartStatistics/echartsRank.vue';
 import statisticsByBar from '@/components/common/chartStatistics/statisticsByBar';
@@ -121,7 +122,8 @@ export default {
     ParksDetails,
     RankArea,
     RankScore,
-    RankRecommend
+    RankRecommend,
+    RankHot
  
   },
   data() {
@@ -177,21 +179,21 @@ export default {
   }
 }
 
-.bg{
-    position: relative;        
-}
-.bg:after{
-    content: '';
-    display: block;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: url(../../assets/image/bgyellow.jpg);
-    opacity: 0.5;
-}
+// .bg{
+//     position: relative;        
+// }
+// .bg:after{
+//     content: '';
+//     display: block;
+//     width: 100%;
+//     height: 100%;
+//     position: absolute;
+//     top: 0;
+//     right: 0;
+//     bottom: 0;
+//     left: 0;
+//     background: url(../../assets/image/bgyellow.jpg);
+//     opacity: 0.5;
+// }
 </style>
 

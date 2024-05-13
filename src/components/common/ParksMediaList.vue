@@ -35,9 +35,9 @@
       label="地址">
     </el-table-column> -->
     <el-table-column
-      prop="AREA"
-      label="公园面积">
-      <template slot-scope="scope">{{ formatArea(scope.row.AREA) }}</template>
+      prop="NOTES"
+      label="攻略数">
+      <template slot-scope="scope">{{ formatArea(scope.row.NOTES) }}</template>
     </el-table-column>
     <el-table-column
       prop="AREA"
@@ -113,7 +113,7 @@ import axios from 'axios';
 
     //将面积数据获取后添加单位
       formatArea(area) {
-          return area + ' km2';
+          return area + ' 篇';
         },
     QueryPark(NAME){
      NAME =NAME.trim(); //去除输入框的空格
