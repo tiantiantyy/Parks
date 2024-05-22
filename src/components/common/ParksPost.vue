@@ -1,10 +1,17 @@
 <template>
   <div class="container-all" >
-    <el-row v-show="notesData">
-  <el-button type="info"  round @click="RankLike">点赞最高</el-button>
-  <el-button type="info"  round @click="RankCollect">收藏最高</el-button>
-  <el-button type="info"  round @click="RankDiscussion">评论最多</el-button>
+ 
+    <RankMedia v-show="!show"/>
+
+    <div class="elbutton" v-show="show">
+      <el-row >
+  <el-button round @click="Home">主页</el-button>
+  <el-button round @click="RankLike">点赞最高</el-button>
+  <el-button round @click="RankCollect">收藏最高</el-button>
+  <el-button round @click="RankDiscussion">评论最多</el-button>
+ 
 </el-row>
+    </div>
   
 
   <div v-for="(note, index) in notesData" :key="index"  class="container" @click="showcomments">
@@ -32,12 +39,17 @@
 </template>
 
 <script>
+import RankMedia from '@/components/common/RankMedia';
 import axios from 'axios';
 export default{
   data(){
     return{
       notesData:null,
+      show:false
 }
+  },
+  components:{
+    RankMedia
   },
   mounted(){
     this.$bus.$on('QueryPark',(NAME)=>{
@@ -45,8 +57,11 @@ export default{
     })
   },
   methods:{
-    collect(){
-      console.log("我需要按收藏排序")
+    //回到主页
+    Home(){
+      this.show=false
+      console.log("主页")
+     
     },
     //用于后端数据库的查询
     queryInfo (NAME) {
@@ -57,6 +72,7 @@ export default{
             }).then((response) => {
             this.notesData=response.data
             this.notesData=this.likeSortedNotes
+            this.show=true
             // console.log(this.notesData)
             // console.log(this.commentsData[0]['评论者昵称'])
 //          console.log(response.data)
@@ -70,10 +86,6 @@ export default{
       } else {
         return '';
       }
-    },
-    //展示帖子对应的评论
-    showcomments(){
-      console.log("这里是showcomments")
     },
     RankLike(){
       this.notesData=this.likeSortedNotes
@@ -119,6 +131,9 @@ export default{
 </script>
 
 <style lang="less" scoped>
+.elbutton{
+  margin: 10px 5px;
+}
   .container-all{
     a{
       text-decoration: none;

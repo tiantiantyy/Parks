@@ -1,6 +1,7 @@
 <template>
   <section class="container">
-    <panel :width="1920" :height="970" position="absolute" :top="0" :left="0"  class="scroll">
+    <panel :width="1920" :height="970" position="absolute" :top="0" :left="0">
+    
     <Gaode/>
     </panel>
   

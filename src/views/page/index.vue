@@ -52,8 +52,6 @@
 
     <!-- 第三个板块 排行榜 -->
     <panel :width="470" :height="970" position="absolute" :top="0" :left="1450" class="scroll">
-
-
          <el-tabs type="border-card" style="width: 100%;">
         <!-- <el-tab-pane class="card-display" label="热门推荐" >
             <h1 class="etitle">热门推荐</h1> 
@@ -67,7 +65,7 @@
         </el-tab-pane>
           <el-tab-pane class="card-display" label="热度榜单">
             <!-- <h1 class="etitle">地质公园热度排行</h1>  -->
-       
+       <RankHeat/>
           </el-tab-pane>
          
           <el-tab-pane class="card-display" label="攻略榜单">
@@ -92,9 +90,10 @@ import ParksDetails from '@/components/common/ParksDetails';
 import ParksInfo from '@/components/common/ParksInfo';
 import ParksTable from '@/components/common/ParksTable.vue';
 import RankArea from '@/components/common/RankArea';
+import RankHeat from '@/components/common/RankHeat';
+import RankHot from '@/components/common/RankHot';
 import RankRecommend from '@/components/common/RankRecommend';
 import RankScore from '@/components/common/RankScore';
-import RankHot from '@/components/common/RankHot';
 import echartsAreas from '@/components/common/chartStatistics/echartsAreas.vue';
 import echartsRank from '@/components/common/chartStatistics/echartsRank.vue';
 import statisticsByBar from '@/components/common/chartStatistics/statisticsByBar';
@@ -122,6 +121,7 @@ export default {
     ParksDetails,
     RankArea,
     RankScore,
+    RankHeat,
     RankRecommend,
     RankHot
  

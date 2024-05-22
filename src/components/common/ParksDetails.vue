@@ -60,7 +60,7 @@
   
 </div>
 
-  <div class="container-all" v-show="ifShow" >
+  <div class="container-all" v-show="ifShow"  >
     <div class="title">
     <h1 >{{park['NAME']}}</h1>
   </div>
@@ -125,6 +125,7 @@ export default{
 <style lang="less" scoped>
 .container-index{
   // padding:0 15px ;
+
 }
  img{
   margin-bottom:5px;
@@ -132,6 +133,7 @@ export default{
   height: 100%;
 }
 .container-all{
+
   width: 100%;
   height: 100%;
   img{
