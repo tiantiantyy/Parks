@@ -156,8 +156,6 @@ import axios from 'axios';
       },
 
       //存储建议数据
-      // 获取输入建议
-   // 获取输入建议
    getSuggestions(queryString, cb) {
       if (queryString) {
         axios.get('http://localhost:3000/api/user/query', {

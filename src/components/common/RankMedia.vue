@@ -75,13 +75,13 @@ export default{
 
     },
     RankCollect(){
-      this.mediaData=this.collectSortedNotes
+      this.mediaData=this.collectSortedNotes()
     },
     RankDiscussion(){
-      this.mediaData=this.discussionSortedNotes
+      this.mediaData=this.discussionSortedNotes()
     },
     RankAll(){
-      this.mediaData=this.allSortedNotes
+      this.mediaData=this.allSortedNotes()
     }
   },
   computed: {  

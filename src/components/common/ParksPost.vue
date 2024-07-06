@@ -14,7 +14,7 @@
     </div>
   
 
-  <div v-for="(note, index) in notesData" :key="index"  class="container" @click="showcomments">
+  <div v-for="(note, index) in notesData" :key="index"  class="container" >
     <a class="link" :href="note['笔记链接']" target="_blank"><img src="../../assets/icon/link.svg"/></a>
     <div><img class="coverimg" :src="note['作者头像']" alt=""> <p class="author">{{ note['作者'] }}</p></div>
     <div class="box-card" >

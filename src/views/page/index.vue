@@ -154,7 +154,7 @@ export default {
 <style lang="less" scoped>
 
 .scroll{
-  overflow: scroll!important;
+  overflow-y: scroll!important;
 }
 .mapNav{
     position: absolute;

@@ -10,7 +10,17 @@
             <span>目的地</span><el-input id="end" placeholder="请输入目的地" v-model="endName"></el-input>
           </li>
           <li>
-            <el-select class="mapselect" v-model="value" placeholder="选择出行方式"></el-select>
+            <el-select v-model="value" clearable placeholder="请选择出行方式">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+
+
+
         <el-button @click="goView">查询</el-button>
           </li>
         </ul>
@@ -23,7 +33,7 @@
         <div id="my-panel"></div>
       </div>
     </div>
-    <div id="container" />
+    <div id="container"/>
   </div>
 </template>
 
@@ -35,7 +45,22 @@ export default {
     return {
       map: null,
       startName: '',
-      endName: ''
+      endName: '',
+      options: [{
+          value: '驾车',
+          label: '驾车'
+        }, {
+          value: '选项2',
+          label: '步行'
+        }, {
+          value: '选项3',
+          label: '骑车'
+        }, {
+          value: '选项4',
+          label: '公交'
+        }
+      ],
+      value: ''
     }
   },
   mounted() {

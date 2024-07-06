@@ -1,20 +1,12 @@
 <template>
   <div>
-    <div class="container-index" v-show="!ifShow" >
-      
-    <div>
-    
+    <div class="container-index" v-show="!ifShow" > <div>
     <h1 class="title">热门推荐</h1>
      <p class="slogan">截至2024年，我国共拥有47处世界地质公园，这47座包罗万象的世界地质公园，为旅行爱好者提供了一个自然与人文完美契合的打卡目的地。 这47个中国世界地质公园，你打卡了几处？</p>
       <!-- <img src="https://cdn.pixabay.com/photo/2014/08/14/11/14/explosion-417894_1280.png" alt=""> -->
     <br>
-  
-
   </div>
   <div class="content">
-    <!-- <img src="https://imagepphcloud.thepaper.cn/pph/image/77/502/524.jpg" alt="">
-    <img src="http://www.globalgeopark.org.cn/UploadFiles/2024_4_16/bsi202404163064589.JPG" alt="">
-    <img src="http://www.globalgeopark.org.cn/UploadFiles/2024_4_16/bsi202404166390038.jpg" alt=""> -->
     <div class="container-all">
     <div class="top">
       <img src="http://www.globalgeopark.org.cn/UploadFiles/2019_10_29/bsi201911197115841.jpg" >
@@ -48,7 +40,7 @@
           </li>
           <li>
             <div class="s_img"><img src="../../assets/icon/parkslocation.svg"  /></div>
-            <div class="s_num"><i>分布省份</i><p class="num">23个</p></div>
+            <div class="s_num"><i>分布省份</i><p class="num">22个</p></div>
           </li>
         </ul>
      </div>
@@ -90,7 +82,6 @@
   </div>
 </div>
 </div>
-  
 </template>
 
 <script>
@@ -124,8 +115,6 @@ export default{
 
 <style lang="less" scoped>
 .container-index{
-  // padding:0 15px ;
-
 }
  img{
   margin-bottom:5px;
@@ -133,7 +122,6 @@ export default{
   height: 100%;
 }
 .container-all{
-
   width: 100%;
   height: 100%;
   img{
