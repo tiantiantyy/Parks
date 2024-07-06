@@ -1,7 +1,3 @@
-# vue-frontend-screen
-
-![image](https://github.com/Microscorpio/vue-frontend-screen/tree/master/src/assets/image/demo.png)
-
 ## Project setup
 ```
 npm install
@@ -26,5 +22,3 @@ npm run test
 ```
 npm run lint
 ```
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
