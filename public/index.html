@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+  <title>中国世界地质公园导览信息系统</title>
+  <style>
+    html,
+    body {
+      cursor: url('./mouse.ico'), auto;
+    }
+
+    /* 隐藏高德底图水印 */
+    .amap-logo {
+      display: none;
+      opacity: 0 !important;
+    }
+
+    .amap-copyright {
+      opacity: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+  <script type="text/javascript" src="<%=htmlWebpackPlugin.files.publicPath%>static/lib/echarts-4.1.0.min.js"></script>
+  <script type="text/javascript"
+    src="<%=htmlWebpackPlugin.files.publicPath%>static/lib/echarts-liquidfill.min.js"></script>
+</body>
+
+</html>
