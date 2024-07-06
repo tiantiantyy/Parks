@@ -43,7 +43,7 @@ export default{
   methods:{
      //用于后端数据库的查询
      queryInfo () {
-             axios.get('http://localhost:3000/api/user/queryNotesRank').then((response) => {
+             axios.get('http://localhost:3000/api/user/queryHeatRank').then((response) => {
             this.areaData=response.data
           
          })
